@@ -1,0 +1,26 @@
+@import "tailwindcss"; 
+/* @import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities); */
+
+@plugin "daisyui" {
+   themes: light --default, dark;
+ }
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme {
+  --color-base-400: #eaeaea;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
