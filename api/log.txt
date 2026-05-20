@@ -1,2 +1,0 @@
-[2026-05-19T04:37:45.712Z] [object Object]
-[2026-05-19T04:39:10.053Z] {"error":{"name":"HttpError","message":"Erro interno","statusCode":500}}
