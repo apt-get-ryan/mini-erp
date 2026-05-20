@@ -1,4 +1,4 @@
-import UserRoleRepository from "../repositories/UserRoleRepository.js"
+import UserRoleRepository from "@/repositories/rbac/UserRoleRepository.js"
 
 
 const saveUserRole = async (userId, roleId) => {

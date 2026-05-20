@@ -1,4 +1,4 @@
-import UserRepository from "../repositories/UserRepository.js";
+import UserRepository from "@/repositories/rbac/UserRepository.js";
 
 const getUser = async (id) => {
   return await UserRepository.getUser(id);

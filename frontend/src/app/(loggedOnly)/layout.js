@@ -7,6 +7,7 @@ import ContentBox from '@/components/Layout/ContentBox/ContentBox';
 import { Notifications, notifications } from '@mantine/notifications';
 import Breadcrumbs from '@/components/Layout/Breadcrumbs/Breadcrumbs';
 import accessModules from '@/api/accessModules';
+import 'mantine-datatable/styles.layer.css';
 
 const path = process.env.NEXT_PUBLIC_API_URL;
 const Layout = async ({children}) => {

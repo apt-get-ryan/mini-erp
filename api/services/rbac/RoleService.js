@@ -1,4 +1,4 @@
-import RoleRepository from "../repositories/RoleRepository.js";
+import RoleRepository from "@/repositories/rbac/RoleRepository.js";
 import * as yup from "yup";
 
 const addSchema = yup.object({

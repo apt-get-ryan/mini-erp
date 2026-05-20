@@ -1,5 +1,5 @@
 import express from "express";
-import ModuleService from '../../services/ModuleService.js';
+import ModuleService from '@/services/rbac/ModuleService.js';
 
 const router = express.Router();
 

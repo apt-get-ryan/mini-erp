@@ -1,5 +1,5 @@
 import express from "express";
-import PermissionService from "../../services/PermissionService.js";
+import PermissionService from "@/services/rbac/PermissionService.js";
 
 const router = express.Router();
 

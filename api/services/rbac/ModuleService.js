@@ -1,4 +1,4 @@
-import ModuleRepository from "../repositories/ModuleRepository.js";
+import ModuleRepository from "@/repositories/rbac/ModuleRepository.js";
 import * as yup from "yup";
 
 

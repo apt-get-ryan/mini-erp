@@ -46,5 +46,16 @@ function useApi() {
   }
   
 }
+function isSuccessful(result) {
+  if(Object.hasOwn(result, 'success'))
+    return true;
+  return false;
+}
 
-export {useApi};
+function extractRequestData(response) {
+  if(isSuccessful(response)) {
+    return response.success.data;
+  }
+  throw new Error("Requisição falhou");
+}
+export {useApi, extractRequestData};

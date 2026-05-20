@@ -1,4 +1,4 @@
-import { Permission } from "../../models/models.js";
+import { Permission } from "@/models/models.js";
 
 
 const getPermission = async (id) => {

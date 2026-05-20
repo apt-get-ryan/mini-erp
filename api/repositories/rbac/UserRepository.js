@@ -1,4 +1,4 @@
-import { User, Permission, Role } from "../../models/models.js";
+import { User, Permission, Role } from "@/models/models.js";
 
 const getUser = async (id) => {
   try {

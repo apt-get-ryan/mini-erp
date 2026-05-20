@@ -1,7 +1,7 @@
 import express from "express";
-import ModuleService from "../../services/ModuleService.js";
-import UserAuthService from "../../services/UserAuthService.js";
-import {getTokenData} from "../../utils/jwt.js";
+import ModuleService from "@/services/rbac/ModuleService.js";
+import UserAuthService from "@/services/rbac/UserAuthService.js";
+import {getTokenData} from "@/utils/jwt.js";
 
 const router = express.Router();
 

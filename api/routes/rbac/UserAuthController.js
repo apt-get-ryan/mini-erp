@@ -1,11 +1,12 @@
 import express from "express";
-import UserService from "../../services/UserService.js";
+import UserService from "@/services/rbac/UserService.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import crypto from "crypto";
 import nodemailer from 'nodemailer';
-import createTransporterTest from '../../services/MailerService.js';
-import UserAuthService from "../../services/rbac/UserAuthService.js";
+import createTransporterTest from '@/services/MailerService.js';
+// import UserAuthService from "@/services/rbac/UserAuthService.js";
+import UserAuthService from "@/services/rbac/UserAuthService.js";
 
 
 const router = express.Router();

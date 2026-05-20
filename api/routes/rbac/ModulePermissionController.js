@@ -1,5 +1,5 @@
 import express from "express";
-import ModulePermissionService from '../../services/ModulePermissionService.js';
+import ModulePermissionService from '@/services/rbac/ModulePermissionService.js';
 const router = express.Router();
 
 router.get("/:id",

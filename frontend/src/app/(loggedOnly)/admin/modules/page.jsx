@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { DataTable } from 'mantine-datatable';
 import { Box, Button, Space } from '@mantine/core';
-import 'mantine-datatable/styles.layer.css';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { modals } from "@mantine/modals";

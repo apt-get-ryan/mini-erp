@@ -1,5 +1,5 @@
 
-import UserAuthRepository from "../repositories/UserAuthRepository.js";
+import UserAuthRepository from "@/repositories/rbac/UserAuthRepository.js";
 
 
 const getUserByLogin = async (id) => {

@@ -1,4 +1,4 @@
-import db from "../../database/database.js";
+import db from "@/database/database.js";
 import { DataTypes } from "sequelize";
 
 const Cliente = db.define(
@@ -32,50 +32,34 @@ const Cliente = db.define(
 
     obs: {
       type: DataTypes.STRING(150),
-    },
-
-    pais: {
-      type: DataTypes.STRING,
-      defaultValue: "BR"
+      allowNull: true
     },
 
     estado: {
       type: DataTypes.STRING,
+      allowNull: true
     },
 
     cidade: {
       type: DataTypes.STRING,
+      allowNull: true
     },
 
     bairro: {
       type: DataTypes.STRING,
+      allowNull: true
     },
 
     logradouro: {
       type: DataTypes.STRING,
+      allowNull: true
     },
-
-    // cep: {
-    //   type: DataTypes.STRING(),
-    //   allowNull: true
-    // },
 
     endereco: {
       type: DataTypes.STRING,
+      allowNull: true
     },
-
-    dadosEnderecamento: {
-      type: DataTypes.VIRTUAL,
-      get: () => {
-        return {
-          estado: this.estado,
-          cidade: this.cidade,
-          bairro: this.bairro,
-          logradouro: this.logradouro,
-          endereco: this.endereco,
-        }
-      }
-    }
+    
   }
 );
 

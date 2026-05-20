@@ -1,5 +1,5 @@
-import { UserRole, Role, User } from "../../models/models.js";
-import db from "../../database/database.js";
+import { UserRole, Role, User } from "@/models/models.js";
+import db from "@/database/database.js";
 
 const saveUserRole = async (userId, roleId) => {
   try {

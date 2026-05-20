@@ -1,5 +1,5 @@
-import { RolePermission, Role } from "../../models/models.js";
-import db from "../../database/database.js";
+import { RolePermission, Role } from "@/models/models.js";
+import db from "@/database/database.js";
 
 const getRolePermissions = async (roleId) => {
   try {

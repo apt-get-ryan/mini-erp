@@ -1,4 +1,4 @@
-import db from "../../database/database";
+import db from "@/database/database";
 import { DataTypes } from "sequelize";
 
 const PedidoItem = db.define(

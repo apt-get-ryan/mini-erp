@@ -1,4 +1,4 @@
 **/.vscode/
-**/.env*
 *.code-workspace
 startup.bat
+**/node_modules

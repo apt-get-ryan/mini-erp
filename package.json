@@ -1,0 +1,9 @@
+{
+  "name": "cadastro-de-clientes",
+  "private": true,
+  "scripts": {
+    "dev:api": "pnpm --filter api dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev": "start \"Api\" cmd /k \"pnpm --filter api dev\" && start \"Front\" cmd /k \"pnpm --filter frontend dev\""
+  }
+}

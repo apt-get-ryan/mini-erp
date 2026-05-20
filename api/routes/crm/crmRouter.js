@@ -1,9 +1,10 @@
 import express from 'express';
 import ClienteController from './ClienteController.js';
-import verifyToken from '../../middleware/authMiddleware.js';
+import verifyToken from '@/middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.use("/cliente", verifyToken, ClienteController);
+router.use("/clientes", verifyToken, ClienteController);
 
-export default crmRoute = router;
+const crmRoute = router;
+export default crmRoute;

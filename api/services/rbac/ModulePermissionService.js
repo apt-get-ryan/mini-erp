@@ -1,4 +1,4 @@
-import ModulePermissionRepository from "../repositories/ModulePermissionRepository.js";
+import ModulePermissionRepository from "@/repositories/rbac/ModulePermissionRepository.js";
 
 const getAcessPermissionsByModuleId = async (id) => {
   return await ModulePermissionRepository.getAcessPermissionsByModuleId(id);

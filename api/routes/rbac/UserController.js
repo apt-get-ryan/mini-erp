@@ -1,5 +1,5 @@
 import express from 'express';
-import UserService from '../services/UserService.js';
+import UserService from '@/services/rbac/UserService.js';
 import bcrypt from 'bcrypt'
 const router =  express.Router();
 

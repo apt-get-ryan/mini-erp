@@ -1,4 +1,4 @@
-import RolePermissionRepository from "../repositories/RolePermissionRepository.js";
+import RolePermissionRepository from "@/repositories/rbac/RolePermissionRepository.js";
 import * as yup from "yup";
 
 const addSchema = yup.object({

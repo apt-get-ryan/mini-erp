@@ -1,5 +1,5 @@
-import { Module, User, Role, Permission } from "../../models/models.js";
-import db from "../../database/database.js";
+import { Module, User, Role, Permission } from "@/models/models.js";
+import db from "@/database/database.js";
 
 const getModule = async (id) => {
   try {

@@ -1,5 +1,5 @@
 import express from "express";
-import UserRoleService from "../../services/UserRoleService.js";
+import UserRoleService from "@/services/rbac/UserRoleService.js";
 
 const router = express.Router();
 

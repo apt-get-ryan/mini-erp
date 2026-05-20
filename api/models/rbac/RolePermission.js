@@ -1,4 +1,4 @@
-import db from "../../database/database.js";
+import db from "@/database/database.js";
 import { DataTypes } from "sequelize";
 
 const RolePermission = db.define(

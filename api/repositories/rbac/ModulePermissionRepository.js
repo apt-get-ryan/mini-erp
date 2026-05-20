@@ -1,5 +1,5 @@
-import {Module} from "../../models/models.js";
-import db from "../../database/database.js";
+import {Module} from "@/models/models.js";
+import db from "@/database/database.js";
 
 const getAcessPermissionsByModuleId = async(id) => {
   try {
