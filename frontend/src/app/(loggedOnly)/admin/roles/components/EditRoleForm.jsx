@@ -50,8 +50,8 @@ const EditRoleForm = ({defaultValues}) => {
   }
   return (
     <form>
-      <TextInput classNames={{ label: "!font-bold"}} label="Nome" {...form.getInputProps("nome")}/>
-      <TextInput classNames={{ label: "!font-bold"}} label="Descrição" {...form.getInputProps("descricao")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Nome" {...form.getInputProps("nome")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Descrição" {...form.getInputProps("descricao")}/>
       <Flex justify={"flex-end"} mt={5} gap={5}>
         <Button onClick={() => handlePermissionManagement(defaultValues.id)}>
           Permissões de {defaultValues.nome}

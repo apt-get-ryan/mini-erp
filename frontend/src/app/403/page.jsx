@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
+import '@mantine/core/styles.layer.css';
 
 const SemAcesso = () => {
   return (
-    <div className="bg-base-400 grid place-items-center min-h-dvh p-4">
-      <div className="w-full max-w-md border bg-base-200 border-slate-300 rounded-2xl p-4">
-        <h1 className='text-xl font-semibold'><span className='font-mono'>403</span> - Acesso recusado</h1>
-        <hr className='border-slate-300'/>
-        <p className='mt-2'>Você não tem acesso a esta página</p>
+    <div className="grid place-items-center min-h-dvh bg-base-400">
+      <div className="flex justify-center items-center w-full max-w-md border bg-base-200 border-slate-300 rounded-2xl p-4">
+        <h1 className='text-3xl font-mono pr-5 mr-5 pl-5 border-r font-medium border-r-slate-500 leading-12'>403</h1>
+        <h2 className='leading-12 grow'>Acesso recusado.</h2>
       </div>
     </div>
   )

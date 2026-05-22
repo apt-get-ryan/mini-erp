@@ -44,9 +44,9 @@ const EditPermissionForm = ({defaultValues}) => {
   const handleSubmit = form.onSubmit(values => editPermissions(defaultValues.id, values))
   return (
     <form>
-      <TextInput classNames={{ label: "!font-bold"}} label="Recurso" {...form.getInputProps("resource")}/>
-      <TextInput classNames={{ label: "!font-bold"}} label="Ação" {...form.getInputProps("action")}/>
-      <TextInput classNames={{ label: "!font-bold"}} label="Descrição" {...form.getInputProps("descricao")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Recurso" {...form.getInputProps("resource")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Ação" {...form.getInputProps("action")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Descrição" {...form.getInputProps("descricao")}/>
       <Flex justify={"flex-end"} mt={5} >
         <Button color='teal' onClick={handleSubmit}>
           Salvar

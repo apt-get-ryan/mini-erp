@@ -7,7 +7,6 @@ const JWT_KEY = process.env.JWT_KEY;
 
 export default async function accessModules() {
   const token = (await cookies()).get("token").value;
-  //console.log(token);
   const decoded = jwt.verify(token, JWT_KEY);
   const accessibleModules = decoded.accessibleModules;
   const map = {};

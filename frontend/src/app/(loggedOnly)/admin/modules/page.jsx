@@ -37,7 +37,7 @@ const page = () => {
     setFetching(true);
     api.get("/modules")
       .then(setData)
-      .catch(console.log)
+      .catch(console.error)
       .finally(() => {
         setFetching(false);
       })

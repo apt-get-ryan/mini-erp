@@ -3,8 +3,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { extractRequestData, useApi } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 import { DataTable } from 'mantine-datatable';
-import { Stack } from '@mantine/core';
+import { Button, Stack } from '@mantine/core';
 import dayjs from 'dayjs';
+import { modals } from '@mantine/modals';
 
 const page = () => {
   const api = useApi();
@@ -30,6 +31,18 @@ const page = () => {
   }, []);
   return (
     <>
+      <>
+        <Button
+          onClick={() => {
+            modals.open({
+              modalId: "addRow",
+              title: "Adicionado cliente",
+              onClose: fillTable,
+              
+            })
+          }}
+        >Adicionar</Button>
+      </>
       <DataTable
         minHeight={200}
         classNames={{header: "select-none"}}

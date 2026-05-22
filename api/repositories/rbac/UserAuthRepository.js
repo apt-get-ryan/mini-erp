@@ -41,7 +41,6 @@ const getUserByLogin = async (login) => {
       return a.slug.localeCompare(b.slug);
     } );
     const userPermissions = user.Roles.flatMap(r => r.Permissions).map(p => `${p.resource}:${p.action}`);
-    console.log(userPermissions)
     user = user.get({plain: true})
     delete user.Roles;
     return {user, accessibleModules, userPermissions};

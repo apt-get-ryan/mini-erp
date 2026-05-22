@@ -68,26 +68,26 @@ const EditModuleForm = ({defaultValues, otherModules, form}) => {
   }
   return (
     <form>
-      <TextInput classNames={{ label: "!font-bold"}} label="Nome" {...form.getInputProps("nome")}/>
-      <TextInput readOnly classNames={{ label: "!font-bold"}} label="Slug" {...form.getInputProps("slug")}/>
-      <TextInput classNames={{ label: "!font-bold"}} label="Rota" {...form.getInputProps("rota")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Nome" {...form.getInputProps("nome")}/>
+      <TextInput readOnly classNames={{ label: "font-bold!"}} label="Slug" {...form.getInputProps("slug")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Rota" {...form.getInputProps("rota")}/>
       <Group>
-        {/* <TextInput classNames={{ label: "!font-bold"}} label="Ícone" {...form.getInputProps("icone")}/> */}
-        <Autocomplete limit={30} classNames={{ label: "!font-bold"}} data={filteredIcons} label="Ícone" value={search} onChange={(value) => { setSearch(value); form.setFieldValue("icone", value)}}/>
+        {/* <TextInput classNames={{ label: "font-bold!"}} label="Ícone" {...form.getInputProps("icone")}/> */}
+        <Autocomplete limit={30} classNames={{ label: "font-bold!"}} data={filteredIcons} label="Ícone" value={search} onChange={(value) => { setSearch(value); form.setFieldValue("icone", value)}}/>
         <Flex h={"stretch"} className='grow' align={"flex-end"} justify={"center"}>
           <Icon name={search} size={35}/>
 
         </Flex>
       </Group>
-      <Input.Wrapper classNames={{ label: "!font-bold"}} label="Filho de">
+      <Input.Wrapper classNames={{ label: "font-bold!"}} label="Filho de">
         <Select allowDeselect data={otherModules.map(m => ({ value: m.id.toString(), label: m.slug}))} {...form.getInputProps("parent_id")}/>
       </Input.Wrapper>
-      <NumberInput classNames={{ label: "!font-bold"}} label="Ordenação" {...form.getInputProps("sort_order")}/>
+      <NumberInput classNames={{ label: "font-bold!"}} label="Ordenação" {...form.getInputProps("sort_order")}/>
       <Group>
         <Switch
           mt={5}
           {...form.getInputProps("is_active", { type: "checkbox"})}
-          classNames={{ label: "!font-bold"}}
+          classNames={{ label: "font-bold!"}}
           withThumbIndicator={false}
           labelPosition="left"
           label="Ativo?"

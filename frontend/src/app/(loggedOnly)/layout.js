@@ -8,6 +8,7 @@ import { Notifications, notifications } from '@mantine/notifications';
 import Breadcrumbs from '@/components/Layout/Breadcrumbs/Breadcrumbs';
 import accessModules from '@/api/accessModules';
 import 'mantine-datatable/styles.layer.css';
+import Footer from '@/components/Layout/Footer/Footer';
 
 const path = process.env.NEXT_PUBLIC_API_URL;
 const Layout = async ({children}) => {
@@ -29,15 +30,13 @@ const Layout = async ({children}) => {
     <div className='grid grid-rows-[auto_auto_1fr_auto] min-h-dvh bg-base-400'>
       <Header/>
       <ModulesProvider modules={modules}>
-        <div suppressHydrationWarning className='mx-auto container mt-2 z-20'>
+        <div suppressHydrationWarning className='mx-auto container mt-2'>
           <Breadcrumbs/>
         </div>
-        <ContentBox className={"mx-auto container py-3  mt-1"}>
+        <ContentBox className={"mx-auto container py-3  mt-1 mb-2.5"}>
           {children}
         </ContentBox>
-        <div>
-          footer
-        </div>
+        <Footer/>
         <Notifications/>
       </ModulesProvider>
     </div>

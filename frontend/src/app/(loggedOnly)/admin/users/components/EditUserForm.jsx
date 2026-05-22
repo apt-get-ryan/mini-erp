@@ -49,14 +49,14 @@ function EditUserForm({defaultValues}) {
   }
   return (
     <form>
-      <TextInput classNames={{ label: "!font-bold"}} label="Nome" {...form.getInputProps("nome")}/>
-      <TextInput classNames={{ label: "!font-bold"}} label="E-mail" {...form.getInputProps("email")}/>
-      <TextInput classNames={{ label: "!font-bold"}} label="Login" {...form.getInputProps("login")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Nome" {...form.getInputProps("nome")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="E-mail" {...form.getInputProps("email")}/>
+      <TextInput classNames={{ label: "font-bold!"}} label="Login" {...form.getInputProps("login")}/>
       <Group>
         <Switch
           mt="5"
           {...form.getInputProps("is_active", { type: "checkbox"})}
-          classNames={{ label: "!font-bold"}}
+          classNames={{ label: "font-bold!"}}
           withThumbIndicator={false}
           labelPosition="left"
           label="Ativo"
