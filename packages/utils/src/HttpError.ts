@@ -162,3 +162,4 @@ class HttpError extends Error {
 
 
 export {HttpError};
+export type HttpErrorDTO = ReturnType<HttpError["getResponse"]>

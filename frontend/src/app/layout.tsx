@@ -3,14 +3,18 @@ import "./globals.css";
 import '@mantine/core/styles.layer.css';
 import '@mantine/notifications/styles.css';
 import { createTheme, MantineProvider } from "@mantine/core"
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata : Metadata = {
   title: "Login",
   description: "Entre para continuar",
+  icons: "/icon.svg"
 };
+
 const theme = createTheme({
-  /** Put your mantine theme override here */
+
 });
+
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">

@@ -16,6 +16,7 @@
     "@mantine/hooks": "^8.3.16",
     "@mantine/modals": "^8.3.16",
     "@mantine/notifications": "^8.3.16",
+    "@shared/utils": "workspace:*",
     "@tanstack/react-query": "^5.91.0",
     "@tanstack/react-table": "^8.21.3",
     "dayjs": "^1.11.19",
@@ -28,15 +29,21 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.63.0",
     "react-icons": "^5.6.0",
+    "react-imask": "^7.6.1",
     "yup": "^1.7.1",
     "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/node": "25.9.1",
+    "@types/react": "^19.2.15",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
     "daisyui": "^5.1.7",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "typescript": "^6.0.3"
   }
 }

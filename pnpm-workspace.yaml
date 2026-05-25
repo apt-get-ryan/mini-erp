@@ -1,3 +1,10 @@
 packages:
   - 'api'
   - 'frontend'
+  - 'packages/*'
+allowBuilds:
+  bcrypt: true
+  core-js-pure: true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true

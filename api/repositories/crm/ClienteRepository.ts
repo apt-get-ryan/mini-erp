@@ -1,13 +1,13 @@
 import db from '@/database/database.js';
 import { HttpError } from '@/utils/HttpError.ts';
 import {Cliente} from '@/models/crm/models.js';
-
+import { FindOptions} from "sequelize";
 async function getCliente(id, options = undefined) {
   try {
     const cliente = await Cliente.findByPk(id, options);
     return cliente;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
@@ -20,9 +20,9 @@ async function getClientes(options = undefined) {
   }
 }
 
-async function createCliente(data) {
+async function createCliente(data, options: FindOptions = undefined) {
   try {
-    const cliente = await Cliente.create(data);
+    const cliente = await Cliente.create(data, options);
     return cliente;
   } catch (error) {
     throw HttpError.from(error);
@@ -37,7 +37,7 @@ async function patchCliente(id, data) {
     cliente.update(data);
     return cliente;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 

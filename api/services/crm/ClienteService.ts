@@ -13,12 +13,8 @@ async function getCliente(id, options: FindOptions = undefined) {
 }
 
 async function createCliente(data: Cliente, options: FindOptions = undefined) {
-  try {
-    createSchema.parse(data);
-    return await ClienteRepository.createCliente(data);
-  } catch (error) {
-    throw HttpError.from(error);
-  }
+  createSchema.parse(data);
+  return await ClienteRepository.createCliente(data, options);
 }
 
 const ClienteService = {

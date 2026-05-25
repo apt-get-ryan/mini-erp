@@ -19,7 +19,10 @@ router.post("/",
   async (req, res) => {
     const data = req.body;
     await ClienteService.createCliente(data);
-    res.send({success: true});
+    return new HttpSuccess({
+      message: "Cliente adicionado com sucesso."
+    }).send(res);
+    res.send({success: true}); // parei aqui, dar uma mensagem ao response successful. para testar o handling
   }
 );
 

@@ -44,7 +44,7 @@ export default function Home() {
               Registrar
             </Tabs.Trigger>
             <motion.div 
-              className="absolute bottom-0 h-0.5 w-1/2 bg-accent"
+              className="absolute bottom-0 h-0.5 w-1/2 bg-blue-500"
               animate={{ left: underlineLeft}}
               transition={{ duration: 0.3, ease: "easeInOut"}}
             />

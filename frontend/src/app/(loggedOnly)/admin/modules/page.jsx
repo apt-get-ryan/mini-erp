@@ -12,7 +12,7 @@ import { useSortedData } from '@/utils/TableData';
 import { openModal } from '@mantine/modals';
 import { useForm } from '@mantine/form';
 
-const page = () => {
+const Page = () => {
   const api = useApi();
   const updateForm = useForm({
       mode: "uncontrolled",
@@ -159,4 +159,4 @@ const page = () => {
   )
 }
 
-export default page;
+export default Page;

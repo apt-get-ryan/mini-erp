@@ -10,7 +10,7 @@ import EditUserForm from './components/EditUserForm';
 import { useApi } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 
-function page() {
+function Page() {
   const api = useApi();
   const [sortStatus, setSortStatus] = useState({
     columnAccessor: 'id',
@@ -116,4 +116,4 @@ function page() {
   )
 }
 
-export default page
+export default Page

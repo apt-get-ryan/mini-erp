@@ -12,7 +12,7 @@ import { useApi } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 
 
-const page = () => {
+const Page = () => {
   const api = useApi();
   const [sortStatus, setSortStatus] = useState({
     columnAccessor: 'id',
@@ -107,4 +107,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -10,20 +10,15 @@ import accessModules from '@/api/accessModules';
 import 'mantine-datatable/styles.layer.css';
 import Footer from '@/components/Layout/Footer/Footer';
 
+export const metadata = {
+  title: {
+    template: "%s | Mini-ERP",
+    default: "Mini-ERP"
+  }
+}
+
 const path = process.env.NEXT_PUBLIC_API_URL;
 const Layout = async ({children}) => {
-  // const cookieStore = await cookies();
-
-  // let modules = await fetch(path+"/me/modules",
-  //   {
-  //     headers: {
-  //       Cookie: cookieStore.toString(),
-  //     },
-  //     method: "GET",
-  //     credentials: "include",
-  //     cache: "no-store"
-  //   }
-  // ).then(res => res.json())
   let modules = await accessModules();
 
   return (

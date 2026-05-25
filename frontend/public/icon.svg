@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_1" data-name="Camada 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70.26 45.91">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        font-family: ConthraxSb-Italic, Conthrax;
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      .cls-2 {
+        fill: #010101;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M35.13,45.91c15.39,0,23.95,0,29.54-3.65,5.59-3.65,5.59-9.25,5.59-19.3s0-15.65-5.59-19.3C59.08,0,50.52,0,35.13,0S11.18,0,5.59,3.65C0,7.31,0,12.9,0,22.96s0,15.65,5.59,19.3c5.59,3.65,14.15,3.65,29.54,3.65Z"/>
+  <text class="cls-1" transform="translate(5.64 30.77) scale(1 1.5)"><tspan x="0" y="0">M-ERP</tspan></text>
+</svg>

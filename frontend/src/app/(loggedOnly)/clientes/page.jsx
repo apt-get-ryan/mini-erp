@@ -1,13 +1,29 @@
 "use client";
 import React, { useEffect, useState, useCallback } from 'react';
-import { extractRequestData, useApi } from '@/utils/Requests';
+import { handleResponse, getSuccessData,useApi, handleApiFillTable } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 import { DataTable } from 'mantine-datatable';
 import { Button, Stack } from '@mantine/core';
 import dayjs from 'dayjs';
 import { modals } from '@mantine/modals';
+import AddCliente from './components/AddCliente';
+import {IMask} from "react-imask";
+import EditCliente from './components/EditCliente';
 
-const page = () => {
+function BtnObservacao({observation}) {
+  return (
+    <Button color="cyan" onClick={(event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log(observation)
+      modals.open({id: "rowObs", title: "Observação", children: (observation)})
+    }}>
+      Observação
+    </Button>
+  )
+}
+
+const Page = () => {
   const api = useApi();
   const [sortStatus, setSortStatus] = useState({
     columnAccessor: 'id',
@@ -18,13 +34,15 @@ const page = () => {
   const sortedData = useSortedData(data, sortStatus);
   const fillTable = useCallback(async () => {
       setFetching(true);
-      api.get("/clientes")
-        .then(extractRequestData)
-        .then(setData)
-        .catch(console.log)
-        .finally(() => {
-          setFetching(false);
-        })
+      // api.get("/clientes")
+      //   .then(handleResponse)
+      //   .then(getSuccessData)
+      //   .then(setData)
+      //   .catch(console.log)
+      //   .finally(() => {
+      //     setFetching(false);
+      //   })
+      handleApiFillTable(api.get("/clientes"), setData, setFetching);
     }, []);
   useEffect(() => {
     fillTable()
@@ -38,7 +56,7 @@ const page = () => {
               modalId: "addRow",
               title: "Adicionado cliente",
               onClose: fillTable,
-              
+              children: (<AddCliente/>)
             })
           }}
         >Adicionar</Button>
@@ -73,47 +91,40 @@ const page = () => {
           {
             accessor: 'whatsapp',
             title: 'WhatsApp',
-            sortable: true
-          }
+            sortable: true,
+            render: ({whatsapp}) => {
+              if(typeof whatsapp == 'string') {
+                const masked = IMask.pipe(
+                  whatsapp,
+                  {
+                    mask: "(00) 00000-0000"
+                  }
+                )
+                return masked;
+              }
+              return whatsapp;
+            }
+          },
+          { accessor: 'instagram',},
+          { accessor: 'email', title: 'E-mail'},
+          { accessor: 'obs', render: ({obs}) => (<BtnObservacao observation={obs} />)},
+          { accessor: 'estado'},
+          { accessor: 'cidade'},
+          { accessor: 'bairro'},
+          { accessor: 'logradouro'},
+          { accessor: 'endereco', title: 'Endereço'},
+          { accessor: 'createdAt', render: ({createdAt}) => dayjs(createdAt).format("DD/MM/YYYY HH:mm:ss"), width: 170},
+          { accessor: 'updatedAt', render: ({updatedAt}) => dayjs(updatedAt).format("DD/MM/YYYY HH:mm:ss"), width: 170},
         ]}
-        rowExpansion={{
-          content: ({record}) => (
-            <Stack gap={5} p={5} >
-              {/* <ul>
-                <li>Instagram: {record.instagram}</li>
-                <li>Criado em: {record.createdAt}</li>
-                <li>Atualizado em: {record.updatedAt}</li>
-              </ul> */}
-              <DataTable
-              classNames={{header: "select-none"}}
-              withTableBorder
-              borderRadius="md"
-              withColumnBorders
-              suppressHydrationWarning
-              striped
-              highlightOnHover
-              records={[record]}
-              m={5}
-              onSortStatusChange={setSortStatus}
-              columns={[
-                { accessor: 'instagram',},
-                { accessor: 'email', title: 'E-mail'},
-                { accessor: 'obs'},
-                { accessor: 'estado'},
-                { accessor: 'cidade'},
-                { accessor: 'bairro'},
-                { accessor: 'logradouro'},
-                { accessor: 'endereco', title: 'Endereço'},
-                { accessor: 'createdAt', render: ({createdAt}) => dayjs(createdAt).format("DD/MM/YYYY HH:mm:ss")},
-                { accessor: 'updatedAt', render: ({updatedAt}) => dayjs(updatedAt).format("DD/MM/YYYY HH:mm:ss")},
-              ]}
-              />
-            </Stack>
-          )
-        }}
+       onRowClick={() => modals.open({
+        modalId: "editRow",
+        title: `Editando ${1}`,
+        onClose: fillTable,
+        children: (<EditCliente />)
+       })}
       />
     </>
   )
 }
 
-export default page
+export default Page
