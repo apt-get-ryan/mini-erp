@@ -4,47 +4,69 @@ import { useForm } from '@mantine/form';
 import { modals } from '@mantine/modals';
 import { redirect } from 'next/navigation';
 import ManageRolesForm from './ManageRolesForm';
+import { handleResponse, useApi } from '@/utils/Requests';
+import { emitirNotificacao, notificarFormInalterado } from '@/utils/Alertas';
+import { updateSchema } from './schemas/User';
+import { zod4Resolver } from 'mantine-form-zod-resolver';
 
-const path = process.env.NEXT_PUBLIC_API_URL;
-
-async function editUser(id, body) {
-  const res = await fetch(path+"/users/"+id, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "PATCH",
-    body: JSON.stringify(body)
-  })
-
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    modals.close("editRow")
-  }
-
-  
-}
 
 function EditUserForm({defaultValues}) {
+  const id = defaultValues.id;
+  const api = useApi();
+  const patchData = (body) => {
+    api.patch("/users/"+id, body)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.close("editRow"))
+      .catch(emitirNotificacao)
+  }
   const [isSaving, setIsSaving] = useState(false);
-
   const form = useForm({
     mode: "uncontrolled",
     initialValues:{
       nome: defaultValues.nome,
       email: defaultValues.email,
       login: defaultValues.login,
-      //token_version: defaultValues.token_version,
       is_active: defaultValues.is_active,
+    },
+    validate: zod4Resolver(updateSchema),
+    validateInputOnBlur: true
+  })
+  const handleSubmit = form.onSubmit(values => {
+    form.validate();
+    if(form.isValid) {
+      if(form.isDirty()) {
+        patchData(values);
+      } else {
+        notificarFormInalterado();
+      }
     }
   })
-  const handleSubmit = form.onSubmit(values => editUser(defaultValues.id, values))
   const handleRoleManagement = (id) => {
     modals.open({
       modalId: "editRoles",
       title: `Roles de ${defaultValues.login}`,
       children: <ManageRolesForm id={id}/>
+    })
+  }
+  const handleDelete = () => {
+    api.delete("/users/"+id)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.closeAll())
+      .catch(emitirNotificacao)
+  }
+  const handleDeleteModal = () => {
+    modals.openConfirmModal({
+      title: `Tem certeza que deseja deletar o usuário #${defaultValues.id}?`,
+      labels: { confirm: "Confirmar", cancel: "Cancelar"},
+      confirmProps: {color: "red"},
+      children: (
+        <div>
+          Usuário: {defaultValues.nome}, não será possível recuperar esses dados após deletar
+        </div>
+      ),
+      onConfirm: handleDelete
     })
   }
   return (
@@ -63,6 +85,9 @@ function EditUserForm({defaultValues}) {
         />
       </Group>
       <Flex justify={"flex-end"} gap={5}>
+        <Button color='red' onClick={handleDeleteModal}>
+          Deletar
+        </Button>
         <Button onClick={() => handleRoleManagement(defaultValues.id)}>
           Roles de {defaultValues.login}
         </Button>

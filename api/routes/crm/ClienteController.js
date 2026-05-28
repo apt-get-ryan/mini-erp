@@ -5,7 +5,6 @@ import { asyncHandler } from "@/utils/AsyncHandler.js";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
 
 const router = express.Router();
-
 router.get("/",
   async (req, res) => {
     const clientes = await ClienteService.getClientes();
@@ -22,9 +21,29 @@ router.post("/",
     return new HttpSuccess({
       message: "Cliente adicionado com sucesso."
     }).send(res);
-    res.send({success: true}); // parei aqui, dar uma mensagem ao response successful. para testar o handling
   }
 );
+
+router.patch("/:id",
+  async (req, res) => {
+    const {id} = req.params;
+    const data = req.body;
+    await ClienteService.patchCliente(id, data);
+    return new HttpSuccess({
+      message: "Cliente editado com sucesso."
+    }).send(res);
+  }
+)
+
+router.delete("/:id",
+  async (req, res) => {
+    const {id} = req.params;
+    await ClienteService.deleteCliente(id);
+    return new HttpSuccess({
+      message: "Cliente deletado com sucesso."
+    }).send(res);
+  }
+)
 
 const ClienteController = router;
 

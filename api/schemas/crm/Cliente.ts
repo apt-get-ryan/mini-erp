@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import z from "zod";
 
 export const clienteSchema = z.object({
   id: z.number()
@@ -52,7 +52,6 @@ export const clienteSchema = z.object({
     .nullable(),
   },
   {
-    // required_error: "Objeto deve estar definido",
     error: (issue) => {
       if(issue.code == "invalid_type" && issue.input == undefined)
         return "Body indefinido"
@@ -63,7 +62,12 @@ export const clienteSchema = z.object({
 
 
 const createSchema = clienteSchema.omit({id: true});
-const updateSchema = clienteSchema.partial(true);
+const updateSchema = clienteSchema.omit({id: true}).partial().refine(
+  (data) => Object.values(data).some(v => v !== undefined),
+  {
+    error: "Ao menos um campo é necessário para performar uma edição."
+  }
+)
 
 
 export {

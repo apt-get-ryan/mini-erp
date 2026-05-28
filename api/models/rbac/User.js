@@ -10,7 +10,16 @@ const User = db.define("User", {
   email: {
     type: DataTypes.STRING(255),
     allowNull: false,
-    unique: true
+    unique: true,
+    validate: {
+      isEmail: {
+        msg: "E-mail inválido."
+      },
+      len: {
+        args: [5, 255],
+        msg: "O e-mail deve ter entre 5 e 255 caracteres."
+      }
+    }
   },
   nome: {
     type: DataTypes.STRING(100),
@@ -18,11 +27,23 @@ const User = db.define("User", {
   },
   login: {
     type: DataTypes.STRING(50),
+    validate: {
+      len: {
+        args: [5, 50],
+        msg: "O login deve ter entre 5 e 50 caracteres."
+      }
+    },
     allowNull: false,
     unique: true
   },
   password: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.STRING(72),
+    validate: {
+      len: {
+        args: [5, 72],
+        msg: "A senha deve ter entre 5 e 72 caracteres."
+      }
+    },
     allowNull: false,
   },
   is_verified: {

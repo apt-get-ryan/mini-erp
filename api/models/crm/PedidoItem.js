@@ -15,7 +15,7 @@ const PedidoItem = db.define(
       allowNull: false
     },
 
-    produto: {
+    id_produto: {
       type: DataTypes.NUMBER,
       allowNull: false
     },

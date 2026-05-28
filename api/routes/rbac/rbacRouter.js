@@ -24,7 +24,7 @@ router.use("/roles", verifyToken, checkPermission(["**role**"]), RoleController)
 router.use("/userRoles", verifyToken, checkPermission(["**user_role**"]), UserRoleController);
 router.use("/permissions", verifyToken, checkPermission(["**permission**"]), PermissionController);
 router.use("/rolePermissions", verifyToken, checkPermission(["**role_permission**"]), RolePermissionController);
-router.use("/modulePermissions", verifyToken, /*checkPermission(),*/ ModulePermissionController);
+router.use("/modulePermission", verifyToken, /*checkPermission(),*/ ModulePermissionController);
 router.use("/me", verifyToken, MeController);
 
 

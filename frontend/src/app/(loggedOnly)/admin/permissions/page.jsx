@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { modals } from "@mantine/modals";
 import EditPermissionForm from './components/EditPermissionForm';
 import AddPermissionForm from './components/AddPermissionForm';
-import { useApi } from '@/utils/Requests';
+import { handleApiFillTable, useApi } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 
 
@@ -23,12 +23,7 @@ const Page = () => {
   const sortedData = useSortedData(data, sortStatus);
   const fillTable = useCallback(async () => {
     setFetching(true);
-    api.get("/permissions")
-      .then(setData)
-      .catch(console.log)
-      .finally(() => {
-        setFetching(false);
-      })
+    handleApiFillTable(api.get("/permissions"), setData, setFetching);
   }, []);
   useEffect(() => {
     fillTable();
@@ -95,7 +90,7 @@ const Page = () => {
           modals.open({
             modalId: "editRow",
             onClose: fillTable,
-            title: `Editando "${resource}.${action}" - #${id}`,
+            title: `Editando "${resource}:${action}" - #${id}`,
             children: (
               <>
                 <Box>

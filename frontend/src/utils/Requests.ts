@@ -16,7 +16,7 @@ function useApi() {
 
  
 
-  const request = useCallback((path: String, options: RequestInit) => {
+  const request = useCallback((path: string, options: RequestInit) => {
     options = {...fetchConfig, ...options};
     return fetch(apiPath+path, options)
       .then((res) => {
@@ -37,12 +37,25 @@ function useApi() {
   }, [router, fetchConfig]);
 
   return {
-    get: (path) => request(path, {method: "GET"}),
-    post: (path, body) => request(path, {
+    get: (path: string) => request(path, {method: "GET"}),
+    post: (path: string, body: object) => request(path, {
       method: "POST",
       body: JSON.stringify(body),
       headers: {"Content-Type": "application/json"}
-    })
+    }),
+    patch: (path: string, body: object) => request(path, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+      headers: {"Content-Type": "application/json"}
+    }),
+    put: (path: string, body: object) => request(path, {
+      method: "PUT",
+      body: JSON.stringify(body),
+      headers: {"Content-Type": "application/json"}
+    }),
+    delete: (path: string) => request(path, {
+      method: "DELETE",
+    }),
   }
 }
 

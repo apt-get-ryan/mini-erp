@@ -1,14 +1,14 @@
 import ModulePermissionRepository from "@/repositories/rbac/ModulePermissionRepository.js";
 
-const getAcessPermissionsByModuleId = async (id) => {
-  return await ModulePermissionRepository.getAcessPermissionsByModuleId(id);
+const getAcessPermissionByModuleId = async (id) => {
+  return await ModulePermissionRepository.getAcessPermissionByModuleId(id);
 }
 
-const setAccessPermissionsToModule = async (id, permission) => {
-  return await ModulePermissionRepository.setAccessPermissionsToModule(id, permission);
+const setAccessPermissionToModule = async (id, data) => {
+  return await ModulePermissionRepository.setAccessPermissionToModule(id, data);
 }
 
 export default {
-  getAcessPermissionsByModuleId,
-  setAccessPermissionsToModule
+  getAcessPermissionByModuleId,
+  setAccessPermissionToModule
 }

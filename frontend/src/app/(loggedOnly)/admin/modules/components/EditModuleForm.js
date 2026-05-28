@@ -1,47 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useForm } from '@mantine/form';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { TextInput, Group, Switch, Flex, Button, NumberInput, Select, Input, Autocomplete } from '@mantine/core';
 import Icon from '@/components/Layout/Icon/Icon';
-import { modals, openModal } from '@mantine/modals';
-import ManageAcessForm from './ManageAcessForm';
-import { useDebouncedValue, useDebouncedState, useDebouncedCallback } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
+import ManageAccessForm from './ManageAccessForm';
+import { useDebouncedValue } from '@mantine/hooks';
+import { useApi, handleResponse } from '@/utils/Requests';
+import { emitirNotificacao } from "@/utils/Alertas";
+import { notifications } from '@mantine/notifications';
+import { getDiffFields } from '@/utils/Form';
 
-const path = process.env.NEXT_PUBLIC_API_URL;
 
-async function editModule(id, body) {
-  const res = await fetch(path+"/modules/"+id, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "PATCH",
-    body: JSON.stringify(body)
-  })
-
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    modals.close("editRow")
-  }
-
-  
-}
 const EditModuleForm = ({defaultValues, otherModules, form}) => {
+  const id = defaultValues.id;
+  const api = useApi();
+  const patchData = useCallback(async (body) => {
+    api.patch("/modules/"+id, body)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.close("editRow"))
+      .catch(emitirNotificacao)
+  }, []);
   const [icons, setIcons] = useState([]);
-  
-  // const form = useForm({
-  //   mode: "uncontrolled",
-  //   initialValues:{
-  //     nome: defaultValues.nome,
-  //     slug: defaultValues.slug,
-  //     rota: defaultValues.rota,
-  //     icone: defaultValues.icone,
-  //     parent_id: defaultValues.parent_id?.toString(),
-  //     sort_order: defaultValues.sort_order,
-  //     is_active: defaultValues.is_active
-  //   }
-  // });
-  const [search, setSearch] = useState(form.getValues().icone); //defaultValues.icone);
+  const [search, setSearch] = useState(form.getValues().icone);
   const [debounced] = useDebouncedValue(search, 300);
 
   const filteredIcons = useMemo(() => {
@@ -50,20 +30,42 @@ const EditModuleForm = ({defaultValues, otherModules, form}) => {
 
   useEffect(() => {
     form.setValues({icone: debounced})
-    // setSearch(form.getValues().icone)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced])
   useEffect(() => {
     import('../assets/fa6-icons.json').then(m => setIcons(m.default));
   }, []);
 
-  const handleSubmit = form.onSubmit(values => editModule(defaultValues.id, values));
+  const handleSubmit = form.onSubmit(values => {
+    const body = getDiffFields(form);
+    patchData(body);
+  });
   const handleAcessManagement = (id) => {
-    console.log(id)
     modals.open({
-      modalId: "editAcess",
+      modalId: "editAccess",
       title: `Acesso a #${id} - ${defaultValues.slug}`,
-      children: <ManageAcessForm moduleId={id}/>
+      children: <ManageAccessForm moduleId={id}/>
+    })
+  }
+
+  const handleDelete = () => {
+    api.delete("/modules/"+id)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.closeAll())
+      .catch(emitirNotificacao)
+  }
+  const handleDeleteModal = () => {
+    modals.openConfirmModal({
+      title: `Tem certeza que deseja deletar o módulo #${id}?`,
+      labels: { confirm: "Confirmar", cancel: "Cancelar"},
+      confirmProps: {color: "red"},
+      children: (
+        <div>
+          Módulo: {defaultValues.nome}, não será possível recuperar esses dados após deletar
+        </div>
+      ),
+      onConfirm: handleDelete
     })
   }
   return (
@@ -94,6 +96,9 @@ const EditModuleForm = ({defaultValues, otherModules, form}) => {
         />
       </Group>
       <Flex justify={"flex-end"} gap={5} mt={5}>
+        <Button color='red' onClick={handleDeleteModal}>
+          Deletar
+        </Button>
         <Button onClick={() => handleAcessManagement(defaultValues.id)}>
           Permissão de acesso
         </Button>

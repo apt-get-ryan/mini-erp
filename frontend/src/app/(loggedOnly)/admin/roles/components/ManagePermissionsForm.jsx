@@ -4,59 +4,32 @@ import { redirect } from 'next/navigation';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
-import { useApi } from '@/utils/Requests';
-
-const path = process.env.NEXT_PUBLIC_API_URL;
-
-const fetchPermissions = async () => {
-  let res = await fetch(path+'/permissions?fields=id,resource,action', {
-    method: 'GET',
-    credentials: 'include',
-    cache: "no-store"
-  });
-  if(res.status === 401) {
-    redirect("/");
-  } else {
-    res = await res.json();
-    return res;
-  }
-}
-
-const fetchRolePermissions = async (roleId) => {
-  let res = await fetch(path+'/rolePermissions/'+roleId, {
-    method: "GET",
-    credentials: "include",
-    cache: "no-store"
-  });
-  if(res.status === 401) {
-    redirect("/");
-  } else {
-    res = await res.json();
-    console.log(res)
-    return res;
-  }
-}
+import { getSuccessData, handleResponse, useApi } from '@/utils/Requests';
+import { useCallback } from 'react';
+import { emitirNotificacao } from '@/utils/Alertas';
 
 
-const updatePermissions = async (roleId, body) => {
-  let res = await fetch(path+"/rolePermissions/"+roleId, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "PUT",
-    body: JSON.stringify(body)
-  });
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    res = await res.json();
-    return res;
-  }
-}
 
 
 const ManagePermissionsForm = ({roleId}) => {
+  const api = useApi();
+  const putData = useCallback((body) => {
+    api.put("/rolePermissions/"+roleId, body)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.close("editPermissions"))
+      .catch(emitirNotificacao)
+  }, [])
+  const getPermissions = useCallback(() => {
+    return api.get("/permissions")
+      .then(handleResponse)
+      .then(getSuccessData)
+  }, [])
+  const getRolePermissions = useCallback(() => {
+    return api.get("/rolePermissions/"+roleId)
+      .then(handleResponse)
+      .then(getSuccessData)
+  }, [])
   const [data, setData] = useState([]);
   const form = useForm({
     mode: "controlled",
@@ -68,8 +41,8 @@ const ManagePermissionsForm = ({roleId}) => {
   useEffect(() => {
     (async () => {
       const [permissions, permissionsOfRole] = await Promise.all([
-        fetchPermissions(),
-        fetchRolePermissions(roleId)
+        getPermissions(),
+        getRolePermissions()
       ]);
       const treatedPermissions = permissions.map(p => ({value: p.id.toString(), label: `${p.resource}.${p.action}`}));
       const permissionsValues = permissionsOfRole.map(p => p.id.toString());
@@ -79,29 +52,8 @@ const ManagePermissionsForm = ({roleId}) => {
   }, []);
 
   const handleSubmit = form.onSubmit(async (values) => {
-    let res = await updatePermissions(roleId, values);
-    if(res.status === 500) {
-      notifications.show({
-        id: "editPermissionsError",
-        title: "Erro",
-        message: res.error,
-        color: "red",
-        classNames: {
-          description: "!text-slate-700"
-        }
-      });
-    } else {
-      notifications.show({
-        id: "editPermissionsSuccess",
-        title: "Sucesso",
-        message: "Permissões editadas com sucesso",
-        color: "green",
-        classNames: {
-          description: "!text-slate-700"
-        }
-      });
-    }
-    modals.close("editPermissions");
+    console.log(values)
+    putData(values);
   })
 
   return (

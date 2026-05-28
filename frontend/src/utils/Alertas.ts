@@ -3,7 +3,6 @@ import type { SuccessData } from "@shared/utils";
 import { notifications } from "@mantine/notifications";
 
 function emitirNotificacao(response: HttpErrorDTO | SuccessData) {
-  console.log(response);
   if("error" in response) {
     notifications.show({
       id: "notifyResponseResult",
@@ -22,5 +21,14 @@ function emitirNotificacao(response: HttpErrorDTO | SuccessData) {
     })
   }
 }
+function notificarFormInalterado() {
+  notifications.show({
+    id: "formUntouched",
+    title: "Erro",
+    message: "O formulário não foi editado",
+    color: "red",
+    classNames: {description: "!text-slate-700"}
+  })
+}
 
-export {emitirNotificacao};
+export {emitirNotificacao, notificarFormInalterado};

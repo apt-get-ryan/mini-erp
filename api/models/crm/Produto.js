@@ -27,7 +27,7 @@ const Produtos = db.define(
 
     custo: {
       type: DataTypes.INTEGER, // VALOR EM CENTAVOS, EM CENTAVOS
-      allowNull: true
+      allowNull: false
     },
 
     categoria: {

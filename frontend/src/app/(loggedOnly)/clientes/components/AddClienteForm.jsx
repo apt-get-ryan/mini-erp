@@ -3,20 +3,11 @@ import React, { useCallback } from 'react';
 import { TextInput, Textarea, Flex, Button } from '@mantine/core';
 import { handleResponse, useApi } from '@/utils/Requests';
 import { emitirNotificacao } from '@/utils/Alertas';
-import { IMaskInput } from 'react-imask';
 import { modals } from '@mantine/modals';
+import {MaskInput} from "@/components/MaskInput/MaskInput";
 
-function MaskInput({maskFormat, ...props }) {
-  return (
-    <TextInput
-      component={IMaskInput}
-      mask={maskFormat}
-      {...props}
-    />
-  )
-}
 
-function AddCliente() {
+function AddClienteForm() {
   const api = useApi();
   const postData = useCallback(async (body) => {
     api.post("/clientes", body)
@@ -24,7 +15,7 @@ function AddCliente() {
       .then(emitirNotificacao)
       .then(() => modals.close("addRow"))
       .catch(emitirNotificacao)
-  }, [])
+  }, []);
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -40,12 +31,9 @@ function AddCliente() {
       endereco: undefined,
     }});
   const handleSubmit = form.onSubmit(values => postData(values))
-  // const handleSubmit = form.onSubmit(values => console.log(values))
   return (
     <form>
       <TextInput classNames={{label: "font-bold!"}} label="Nome" {...form.getInputProps("nomeFantasia")} maxLength={100}/>
-      {/* <MaskInput classNames={{label: "font-bold!"}} label="WhatsApp" {...form.getInputProps("whatsapp")}/> */}
-      {/* <MaskedInput classNames={{label: "font-bold!"}} label="WhatsApp" {...form.getInputProps("whatsapp")} maskFormat={"(00) 00000-0000"} placeholder="(99) 99999-9999"/> */}
       <MaskInput
         classNames={{label: "font-bold!"}} 
         label="WhatsApp"
@@ -66,7 +54,6 @@ function AddCliente() {
         placeholder='@...'
         maxLength={30}
         maskFormat={/^@.*$/}
-
       />
       <Textarea classNames={{label: "font-bold!"}} label="Obs" {...form.getInputProps("obs")} maxLength={150} minRows={2} maxRows={5}/>
       <TextInput classNames={{label: "font-bold!"}} label="Estado" {...form.getInputProps("estado")} />
@@ -83,4 +70,4 @@ function AddCliente() {
   )
 }
 
-export default AddCliente
+export default AddClienteForm

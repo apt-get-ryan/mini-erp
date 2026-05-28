@@ -1,21 +1,20 @@
 "use client";
 import React, { useEffect, useState, useCallback } from 'react';
-import { handleResponse, getSuccessData,useApi, handleApiFillTable } from '@/utils/Requests';
+import { useApi, handleApiFillTable } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 import { DataTable } from 'mantine-datatable';
-import { Button, Stack } from '@mantine/core';
+import { Button } from '@mantine/core';
 import dayjs from 'dayjs';
 import { modals } from '@mantine/modals';
-import AddCliente from './components/AddCliente';
+import AddClienteForm from './components/AddClienteForm';
 import {IMask} from "react-imask";
-import EditCliente from './components/EditCliente';
+import EditClienteForm from './components/EditClienteForm';
 
 function BtnObservacao({observation}) {
   return (
     <Button color="cyan" onClick={(event) => {
       event.preventDefault();
       event.stopPropagation();
-      console.log(observation)
       modals.open({id: "rowObs", title: "Observação", children: (observation)})
     }}>
       Observação
@@ -34,14 +33,6 @@ const Page = () => {
   const sortedData = useSortedData(data, sortStatus);
   const fillTable = useCallback(async () => {
       setFetching(true);
-      // api.get("/clientes")
-      //   .then(handleResponse)
-      //   .then(getSuccessData)
-      //   .then(setData)
-      //   .catch(console.log)
-      //   .finally(() => {
-      //     setFetching(false);
-      //   })
       handleApiFillTable(api.get("/clientes"), setData, setFetching);
     }, []);
   useEffect(() => {
@@ -54,9 +45,9 @@ const Page = () => {
           onClick={() => {
             modals.open({
               modalId: "addRow",
-              title: "Adicionado cliente",
+              title: "Adicionando cliente",
               onClose: fillTable,
-              children: (<AddCliente/>)
+              children: (<AddClienteForm/>)
             })
           }}
         >Adicionar</Button>
@@ -116,11 +107,11 @@ const Page = () => {
           { accessor: 'createdAt', render: ({createdAt}) => dayjs(createdAt).format("DD/MM/YYYY HH:mm:ss"), width: 170},
           { accessor: 'updatedAt', render: ({updatedAt}) => dayjs(updatedAt).format("DD/MM/YYYY HH:mm:ss"), width: 170},
         ]}
-       onRowClick={() => modals.open({
+       onRowClick={({record}) => modals.open({
         modalId: "editRow",
-        title: `Editando ${1}`,
+        title: `Editando cliente #${record.id}`,
         onClose: fillTable,
-        children: (<EditCliente />)
+        children: (<EditClienteForm defaultValues={record}/>)
        })}
       />
     </>

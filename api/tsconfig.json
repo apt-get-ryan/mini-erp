@@ -5,13 +5,12 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "outDir": "dist",
-    "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": ["./*"]
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["**/*"]
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist"]
 }

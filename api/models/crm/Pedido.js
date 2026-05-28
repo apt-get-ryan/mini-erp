@@ -12,6 +12,9 @@ const Pedido = db.define(
     id_cliente: {
       type: DataTypes.INTEGER,
     },
+    valor_pago: {
+      type: DataTypes.INTEGER
+    }
   },
   {
     

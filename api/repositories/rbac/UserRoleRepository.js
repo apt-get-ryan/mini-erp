@@ -1,11 +1,12 @@
 import { UserRole, Role, User } from "@/models/models.js";
 import db from "@/database/database.js";
+import { HttpError } from "@/utils/HttpError.ts";
 
 const saveUserRole = async (userId, roleId) => {
   try {
     return await UserRole.create({user_id: userId, role_id: roleId});
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
@@ -23,7 +24,7 @@ const getRolesByUserId = async (userId) => {
       }]
     });
   } catch(error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
@@ -39,11 +40,11 @@ const setRolesToUser = async (userId, roles) => {
         joinTableAttributes: [],
         raw: true
       });
-      return newRoles;
+      return ;
     });
-    return result;
+    return;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 

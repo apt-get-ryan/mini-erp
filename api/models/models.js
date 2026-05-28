@@ -20,13 +20,15 @@ Many-to-Many através de UserRole
 User.belongsToMany(Role, {
   through: UserRole,
   foreignKey: "user_id",
-  otherKey: "role_id"
+  otherKey: "role_id",
+  onDelete: 'CASCADE'
 });
 
 Role.belongsToMany(User, {
   through: UserRole,
   foreignKey: "role_id",
-  otherKey: "user_id"
+  otherKey: "user_id",
+  onDelete: 'CASCADE'
 });
 
 
@@ -37,29 +39,34 @@ Many-to-Many através de RolePermission
 Role.belongsToMany(Permission, {
   through: RolePermission,
   foreignKey: "role_id",
-  otherKey: "permission_id"
+  otherKey: "permission_id",
+  onDelete: 'CASCADE'
 });
 
 Permission.belongsToMany(Role, {
   through: RolePermission,
   foreignKey: "permission_id",
-  otherKey: "role_id"
+  otherKey: "role_id",
+  onDelete: 'CASCADE'
 });
 
 
 /*
-Module ↔ Permission
-1 Module possui várias permissões
+Module -> Permission
+1 Module possui uma permissão
+***Manter nesse formato
 */
 Module.belongsToMany(Permission, {
   through: ModulePermission,
   foreignKey: "module_id",
-  otherKey: "permission_id"
+  otherKey: "permission_id",
+  onDelete: 'CASCADE'
 });
 Permission.belongsToMany(Module, {
   through: ModulePermission,
   foreignKey: "permission_id",
-  otherKey: "module_id"
+  otherKey: "module_id",
+  onDelete: 'CASCADE'
 });
 
 

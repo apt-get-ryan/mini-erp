@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback } from 'react';
 import { DataTable } from 'mantine-datatable';
-import { Box } from '@mantine/core';
+import { Box, Button } from '@mantine/core';
 import 'mantine-datatable/styles.layer.css';
 import { useState } from 'react';
 import dayjs from 'dayjs';
@@ -9,6 +9,8 @@ import { modals } from "@mantine/modals";
 import EditUserForm from './components/EditUserForm';
 import { useApi } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
+import { handleApiFillTable } from '@/utils/Requests';
+import AddUserForm from './components/AddUserForm';
 
 function Page() {
   const api = useApi();
@@ -21,21 +23,27 @@ function Page() {
   const sortedData = useSortedData(data, sortStatus);
   const fillTable = useCallback(async () => {
     setFetching(true);
-    api.get("/users")
-      .then(setData)
-      .catch(console.log)
-      .finally(() => {
-        setFetching(false);
-      })
+    handleApiFillTable(api.get("/users"), setData, setFetching);
   }, []);
   useEffect(() => {
     fillTable();
   }, [])
   return (
     <>
-      {/* <Box mb="sm">
-        <Button>Adcionar usuário</Button>
-      </Box> */}
+      <>
+        <Button
+          onClick={() => {
+            modals.open({
+              modalId: "addRow",
+              title: "Adicionando usuário",
+              onClose: fillTable,
+              children: (<AddUserForm/>)
+            })
+          }}
+        >
+          Adicionar
+        </Button>
+      </>
       <DataTable
         minHeight={200}
         classNames={{header: "select-none"}}
@@ -76,6 +84,12 @@ function Page() {
             title: 'Verificado',
             textAlign: "center",
             render: ({is_verified}) => is_verified ? '✅' : '❌'
+          },
+          {
+            accessor: 'is_active',
+            title: 'Ativo',
+            textAlign: "center",
+            render: ({is_active}) => is_active ? '✅' : '❌'
           },
           {
             accessor: 'verification_code', 

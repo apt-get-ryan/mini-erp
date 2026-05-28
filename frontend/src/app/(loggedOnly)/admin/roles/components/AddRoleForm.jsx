@@ -1,36 +1,21 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from '@mantine/form';
 import { TextInput, Flex, Button} from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { notifications } from '@mantine/notifications';
+import { useApi } from '@/utils/Requests';
+import { handleResponse } from '@/utils/Requests';
+import { emitirNotificacao } from '@/utils/Alertas';
 
-const path = process.env.NEXT_PUBLIC_API_URL;
-async function addRoles(body) {
-  const res = await fetch(path+"/roles", {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "POST",
-    body: JSON.stringify(body)
-  })
-
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    modals.close("addRow");
-    notifications.show({
-      id: "response",
-      title: res.error? "Erro" : "Sucesso",
-      message: res?.error || "Adicionado com sucesso",
-      color: res?.error ? "red" : "green",
-      classNames: {description: "!text-slate-700"},
-    })
-  }
-
-  
-}
 const AddRoleForm = () => {
+  const api = useApi();
+  const postData = useCallback(async (body) => {
+      api.post("/roles", body)
+        .then(handleResponse)
+        .then(emitirNotificacao)
+        .then(() => modals.close("addRow"))
+        .catch(emitirNotificacao)
+    }, []);
+
   const form = useForm(
   {
     mode: "uncontrolled",
@@ -39,7 +24,7 @@ const AddRoleForm = () => {
       descricao: "",
     }
   })
-  const handleSubmit = form.onSubmit(values => addRoles(values))
+  const handleSubmit = form.onSubmit(values => postData(values))
   return (
     <form>
       <TextInput classNames={{ label: "font-bold!"}} label="Nome" {...form.getInputProps("nome")}/>

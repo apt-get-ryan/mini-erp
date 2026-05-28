@@ -1,5 +1,6 @@
 import express from "express";
 import UserRoleService from "@/services/rbac/UserRoleService.js";
+import HttpSuccess from "@/utils/HttpSuccess.ts";
 
 const router = express.Router();
 
@@ -7,12 +8,10 @@ router.post(
   "/",
   async (req, res) => {
     const { userId, roleId} = req.body;
-    try {
-      const userRole = await UserRoleService.saveUserRole(userId, roleId);
-      res.send(userRole)
-    } catch (error) {
-      res.status(500).send({ error: error.message});
-    }
+    const userRole = await UserRoleService.saveUserRole(userId, roleId);
+    return new HttpSuccess({
+      message: "Usuário adicionado com sucesso."
+    }).send(res);
   }
 )
 
@@ -21,12 +20,10 @@ router.put(
   async (req, res) => {
     const {userId} = req.params;
     const {roles} = req.body;
-    try {
-      const newRoles = await UserRoleService.setRolesToUser(userId, roles);
-      res.send({success: true, roles: newRoles});
-    } catch (error) {
-      res.status(500).send({ error: error.message});
-    }
+    await UserRoleService.setRolesToUser(userId, roles);
+    return new HttpSuccess({
+      message: "Usuário editado com sucesso."
+    }).send(res);
   }
 )
 
@@ -34,12 +31,10 @@ router.get(
   "/:userId",
   async (req, res) => {
     const {userId} = req.params;
-    try {
-      const roles = await UserRoleService.getRolesByUserId(userId);
-      res.send(roles)
-    } catch (error) {
-      res.status(500).send({ error: error.message});
-    }
+    const roles = await UserRoleService.getRolesByUserId(userId);
+    return new HttpSuccess({
+      data: roles
+    }).send(res);
   }
 )
 

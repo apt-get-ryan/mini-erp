@@ -1,11 +1,11 @@
 import { Module, User, Role, Permission } from "@/models/models.js";
-import db from "@/database/database.js";
+import { HttpError } from '@/utils/HttpError.ts';
 
 const getModule = async (id) => {
   try {
     return await Module.findByPk(id);
   } catch(error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
@@ -13,7 +13,7 @@ const getModules = async () => {
   try {
     return await Module.findAll();
   } catch(error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
@@ -57,30 +57,42 @@ const getAcessibleModules = async (id) => {
     });
     return tree;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
 
-const saveModule = async ({nome, slug, rota, icone, parent_id, sort_order, is_active}) => {
+const saveModule = async (data) => {
   try {
-    const module = await Module.create({nome, slug, rota, icone, parent_id, sort_order, is_active});
+    const module = await Module.create(data);
     return module;
   } catch ( error ) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
 
-const updateModule = async (id, {nome, slug, rota, icone, parent_id, sort_order, is_active}) => {
+const updateModule = async (id, data) => {
   try {
     const targetModule = await Module.findByPk(id);
     if(!targetModule)
-      throw new Error("Module not found");
-    await targetModule.update({nome, slug, rota, icone, parent_id, sort_order, is_active});
-    return targetModule;
+      throw new HttpError("Não foi possível encontrar os dados para editar", 404);
+    await targetModule.update(data);
+    return;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
+  }
+}
+
+const deleteModule = async (id) => {
+  try {
+    const module = await Module.findByPk(id);
+    if(!module)
+      throw new HttpError("Não foi possível encontrar os dados para deletar", 404);
+    await module.destroy();
+    return;
+  } catch (error) {
+    throw HttpError.from(error)
   }
 }
 
@@ -89,7 +101,8 @@ const ModuleRepository = {
   getModules,
   getAcessibleModules,
   saveModule,
-  updateModule
+  updateModule,
+  deleteModule
 };
 
 export default ModuleRepository;

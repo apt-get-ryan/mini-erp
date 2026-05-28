@@ -1,10 +1,10 @@
 import { User, Permission, Role } from "@/models/models.js";
-
+import { HttpError } from "@/utils/HttpError.ts";
 const getUser = async (id) => {
   try {
     return await User.findByPk(id);
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
@@ -13,7 +13,7 @@ const getUsers = async () => {
     const users = await User.findAll();
     return users;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
@@ -29,7 +29,7 @@ const getUserByLogin = async (login, verified = true) => {
     );
     return user;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
@@ -58,22 +58,24 @@ const getUserByLoginWithPermissions = async (login) => {
 
       }
     );
-
-    const permissions = user.Roles.flatMap((role) => role.Permissions).map(p => `${p.resource}:${p.action}`);
+    const getPermissionString = (p) => {
+      return `${p.resource}:${p.action}`
+    }
+    const permissions = user.Roles.flatMap((role) => getPermissionString(role.Permission))
     const roles = user.Roles.map((role) => role.get('nome'));
     
     return {user, permissions, roles};
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
-const saveUser = async ({email, nome, login, password, verification_code, is_verified }) => {
+const saveUser = async (data) => {
   try {
-    const user = await User.create({email, nome, login, password, verification_code, is_verified })
-    return user;
+    const user = await User.create(data)
+    return;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
@@ -81,15 +83,24 @@ const updateUser = async (id, data) => {
   try {
     const user = await User.findByPk(id);
     if(!user)
-      throw new Error("user not found");
-
-    user.increment("token_version")
+      throw new HttpError("Não foi possível encontrar os dados para editar", 404);
+    await user.increment("token_version")
     await user.update(data);
-
-
-    return user;
+    return;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
+  }
+}
+
+const deleteUser = async (id) =>{
+  try {
+    const user = await User.findByPk(id);
+    if(!user)
+      throw new HttpError("Não foi possível encontrar os dados para deletar", 404);
+    await user.destroy();
+    return;
+  } catch (error) {
+    throw HttpError.from(error)
   }
 }
 const UserRepository = {
@@ -98,7 +109,8 @@ const UserRepository = {
   getUserByLogin,
   getUserByLoginWithPermissions,
   saveUser,
-  updateUser
+  updateUser,
+  deleteUser
 }
 
 export default UserRepository;

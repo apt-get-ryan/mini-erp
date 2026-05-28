@@ -8,7 +8,9 @@ function writeLog(message) {
   const line = `[${timeStamp}] ${message}\n`
 
   appendFile(logPath, line, (err) => {
-    console.error('Erro ao escrever o log:', err);
+    if(err) {
+      console.error('Erro ao escrever o log:', err);
+    }
   });
 }
 

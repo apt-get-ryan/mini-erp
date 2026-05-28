@@ -1,7 +1,8 @@
 import { RolePermission, Role } from "@/models/models.js";
 import db from "@/database/database.js";
+import { HttpError } from "@/utils/HttpError.ts";
 
-const getRolePermissions = async (roleId) => {
+const getRolePermission = async (roleId) => {
   try {
     const role = await Role.findByPk(roleId, {attributes: ['id']});
     const permissions = await role.getPermissions({
@@ -14,7 +15,7 @@ const getRolePermissions = async (roleId) => {
     })
     return permissions;
   } catch(error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
@@ -22,7 +23,7 @@ const saveRolePermission = async ({role_id, permission_id}) => {
   try {
     return await RolePermission.create({role_id, permission_id})
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 
 }
@@ -34,33 +35,18 @@ const setPermissionsToRole = async (roleId, permissions) => {
         attributes: ['id']
       });
       await role.setPermissions(permissions, { transaction: t});
-      // const newPermissions = role.getPermissions({
-      //   attributes: ['id', 'resource', 'action'],
-      // })
+
     });
 
-    //throw new Error();
-    
-    return result;
-
+    return;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error)
   }
 }
 
-// const updateRolePermission = async (id, data) => {
-//   try {
-//     const [updatedRows] = await RolePermission.update(data, { where: { id: id}});
-//     if(!updatedRows)
-//       throw new Error("0 rows changed")
-//     return { success: true };
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// }
 
 export default {
-  getRolePermissions,
+  getRolePermission,
   saveRolePermission,
   setPermissionsToRole
 }

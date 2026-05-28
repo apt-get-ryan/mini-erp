@@ -1,32 +1,24 @@
 import { TextInput, Group, Flex, Select, Input, NumberInput, Switch, Button, Autocomplete } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Icon from '@/components/Layout/Icon/Icon';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback, useMemo} from 'react';
 import { modals } from '@mantine/modals';
-const path = process.env.NEXT_PUBLIC_API_URL;
+import { useApi } from '@/utils/Requests';
+import { useDebouncedValue } from '@mantine/hooks';
+import { emitirNotificacao } from '@/utils/Alertas';
+import { handleResponse } from '@/utils/Requests';
 
-async function addModule(body) {
-  
-  const res = await fetch(path+"/modules", {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "POST",
-    body: JSON.stringify(body)
-  })
-
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    modals.close("addRow")
-  }
-
-  
-}
 const AddModuleForm = ({modules}) => {
+  const api = useApi();
+  const postData = useCallback(async (body) => {
+    api.post("/modules", body)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.close("addRow"))
+      .catch(emitirNotificacao)
+  }, []);
   const [icons, setIcons] = useState([]);
-  const [search, setSearch] = useState(defaultValues.icone);
+  const [search, setSearch] = useState("");
   const [debounced] = useDebouncedValue(search, 300);
   const filteredIcons = useMemo(() => {
     return icons.filter(icon => icon.toLowerCase().includes(debounced.toLowerCase()))
@@ -46,7 +38,8 @@ const AddModuleForm = ({modules}) => {
       is_active: true
     }
   })
-  const handleSubmit= form.onSubmit( (values) => addModule(values));
+
+  const handleSubmit= form.onSubmit( (values) => postData(values));
   return (
     <form>
       <TextInput classNames={{ label: "font-bold!"}} label="Nome" {...form.getInputProps("nome")}/>

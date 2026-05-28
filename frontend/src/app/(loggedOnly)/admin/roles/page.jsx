@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { modals } from "@mantine/modals";
 import EditRoleForm from './components/EditRoleForm';
 import AddRoleForm from './components/AddRoleForm';
-import { useApi } from '@/utils/Requests';
+import { handleApiFillTable, useApi } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 
 
@@ -23,12 +23,7 @@ const Page = () => {
   const sortedData = useSortedData(data, sortStatus);
   const fillTable = useCallback(async () => {
       setFetching(true);
-      api.get("/roles")
-        .then(setData)
-        .catch(console.log)
-        .finally(() => {
-          setFetching(false);
-        })
+      handleApiFillTable(api.get("/roles"), setData, setFetching);
     }, []);
   useEffect(() => {
     fillTable();

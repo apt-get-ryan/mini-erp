@@ -4,34 +4,21 @@ import { TextInput, Flex, Button} from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import ManagePermissionsForm from './ManagePermissionsForm';
+import { handleResponse, useApi } from '@/utils/Requests';
+import { useCallback } from 'react';
+import { emitirNotificacao } from '@/utils/Alertas';
 const path = process.env.NEXT_PUBLIC_API_URL;
 
-async function editRoles(id, body) {
-  const res = await fetch(path+"/roles/"+id, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "PATCH",
-    body: JSON.stringify(body)
-  })
 
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    modals.close("editRow");
-    notifications.show({
-      id: "response",
-      title: res.error? "Erro" : "Sucesso",
-      message: res?.error || "Editado com sucesso",
-      color: res?.error ? "red" : "green",
-      classNames: {description: "!text-slate-700"},
-    })
-  }
-
-  
-}
 const EditRoleForm = ({defaultValues}) => {
+  const api = useApi();
+  const patchData = useCallback((id, body) => {
+    api.patch("/roles/"+id, body)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.close("editRow"))
+      .catch(emitirNotificacao)
+  }, [])
   const form = useForm(
   {
     mode: "uncontrolled",
@@ -40,7 +27,27 @@ const EditRoleForm = ({defaultValues}) => {
       descricao: defaultValues.descricao,
     }
   })
-  const handleSubmit = form.onSubmit(values => editRoles(defaultValues.id, values));
+  const handleSubmit = form.onSubmit(values => patchData(defaultValues.id, values));
+  const handleDelete = useCallback(() => {
+      api.delete("/roles/"+defaultValues.id)
+        .then(handleResponse)
+        .then(emitirNotificacao)
+        .then(() => modals.closeAll())
+        .catch(emitirNotificacao)
+    }, []);
+  const handleDeleteModal = useCallback(() => {
+    modals.openConfirmModal({
+      title: `Tem certeza que deseja deletar o role ${defaultValues.resource}?`,
+      labels: { confirm: "Confirmar", cancel: "Cancelar"},
+      confirmProps: {color: "red"},
+      children: (
+        <div>
+          Role: {`${defaultValues.resource}:${defaultValues.action}`}, não será possível recuperar esses dados após deletar
+        </div>
+      ),
+      onConfirm: handleDelete
+    })
+  }, [])
   const handlePermissionManagement = (id) => {
     modals.open({
       modalId: "editPermissions",
@@ -53,6 +60,9 @@ const EditRoleForm = ({defaultValues}) => {
       <TextInput classNames={{ label: "font-bold!"}} label="Nome" {...form.getInputProps("nome")}/>
       <TextInput classNames={{ label: "font-bold!"}} label="Descrição" {...form.getInputProps("descricao")}/>
       <Flex justify={"flex-end"} mt={5} gap={5}>
+        <Button color='red' onClick={handleDeleteModal}>
+          Deletar
+        </Button>
         <Button onClick={() => handlePermissionManagement(defaultValues.id)}>
           Permissões de {defaultValues.nome}
         </Button>

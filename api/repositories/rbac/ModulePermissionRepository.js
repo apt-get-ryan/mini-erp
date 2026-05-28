@@ -1,12 +1,12 @@
 import {Module} from "@/models/models.js";
-import db from "@/database/database.js";
+import { HttpError } from "@/utils/HttpError.ts";
 
-const getAcessPermissionsByModuleId = async(id) => {
+const getAcessPermissionByModuleId = async(id) => {
   try {
     const module = await Module.findByPk(id, {
       attributes: ['id']
     });
-    const accessPermissions = await module.getPermissions({
+    const accessPermission = await module.getPermissions({
       attributes: ['id', 'resource', 'action'],
       joinTableAttributes: [],
       raw: true,
@@ -14,29 +14,29 @@ const getAcessPermissionsByModuleId = async(id) => {
         ['id', 'ASC']
       ]
     });
-    return accessPermissions;
+    return accessPermission;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
 
-const setAccessPermissionsToModule = async (id, permissions) => {
+const setAccessPermissionToModule = async (id, permission) => {
   try {
-    db.transaction(async t => {
-      const module = await Module.findByPk(id, {
-        attributes: ['id']
-      });
-      await module.setPermissions(permissions, { transaction: t})
+    const module = await Module.findByPk(id, {
+      attributes: ['id']
     });
+    if(!module)
+      throw new HttpError("Não foi possível encontrar os dados para editar", 404);
+    await module.setPermissions(permission)
     return;
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
   }
 }
 
 
 export default {
-  getAcessPermissionsByModuleId,
-  setAccessPermissionsToModule
+  getAcessPermissionByModuleId,
+  setAccessPermissionToModule
 }

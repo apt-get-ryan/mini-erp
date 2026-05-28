@@ -1,7 +1,6 @@
-import db from '@/database/database.js';
 import { HttpError } from '@/utils/HttpError.ts';
 import {Cliente} from '@/models/crm/models.js';
-import { FindOptions} from "sequelize";
+import { FindOptions } from "sequelize";
 async function getCliente(id, options = undefined) {
   try {
     const cliente = await Cliente.findByPk(id, options);
@@ -20,10 +19,10 @@ async function getClientes(options = undefined) {
   }
 }
 
-async function createCliente(data, options: FindOptions = undefined) {
+async function createCliente(data) {
   try {
-    const cliente = await Cliente.create(data, options);
-    return cliente;
+    await Cliente.create(data);
+    return;
   } catch (error) {
     throw HttpError.from(error);
   }
@@ -33,29 +32,31 @@ async function patchCliente(id, data) {
   try {
     const cliente = await Cliente.findByPk(id);
     if(!cliente)
-      throw new Error("Cliente não existe");
-    cliente.update(data);
+      throw new HttpError("Não foi possível encontrar os dados para editar", 404);
+    await cliente.update(data);
     return cliente;
   } catch (error) {
     throw HttpError.from(error);
   }
 }
 
-// async function deleteCliente(id) {
-//   try {
-//     db.transaction(t => {
-//       await Cliente.destroy(id)
-//     })
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-//
-// }
+async function deleteCliente(id) {
+  try {
+    const cliente = await Cliente.findByPk(id);
+    if(!cliente)
+      throw new HttpError("Não foi possível encontrar os dados para deletar", 404);
+    await cliente.destroy();
+    return;
+  } catch (error) {
+    throw HttpError.from(error);
+  }
+}
 
 const ClienteRepository = {
   getCliente,
   getClientes,
   createCliente,
-  patchCliente
+  patchCliente,
+  deleteCliente
 };
 export default ClienteRepository;

@@ -1,7 +1,5 @@
 import ClienteRepository from "@/repositories/crm/ClienteRepository.js";
-import {createSchema} from "@/schemas/crm/Cliente.ts";
-import type { Cliente } from "@/schemas/crm/Cliente.ts";
-import { HttpError } from "@/utils/HttpError.ts";
+import {createSchema, updateSchema} from "@/schemas/crm/Cliente.ts";
 import type { FindOptions } from "sequelize";
 
 async function getClientes(options: FindOptions = undefined) {
@@ -12,16 +10,24 @@ async function getCliente(id, options: FindOptions = undefined) {
   return await ClienteRepository.getCliente(id, options);
 }
 
-async function createCliente(data: Cliente, options: FindOptions = undefined) {
+async function createCliente(data, options: FindOptions = undefined) {
   createSchema.parse(data);
   return await ClienteRepository.createCliente(data, options);
+}
+async function patchCliente(id, data) {
+  updateSchema.parse(data);
+  return await ClienteRepository.patchCliente(id, data);
+}
+async function deleteCliente(id) {
+  return await ClienteRepository.deleteCliente(id);
 }
 
 const ClienteService = {
   getClientes,
   getCliente,
-  createCliente
-
+  createCliente,
+  patchCliente,
+  deleteCliente
 };
 
 export default ClienteService;

@@ -1,38 +1,20 @@
 import React from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, Group, Switch, Flex, Button, NumberInput, Select, Input } from '@mantine/core';
-import Icon from '@/components/Layout/Icon/Icon';
+import { TextInput, Flex, Button } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { notifications } from '@mantine/notifications';
+import { handleResponse, useApi } from '@/utils/Requests';
+import { useCallback } from 'react';
+import { emitirNotificacao } from '@/utils/Alertas';
 
-const path = process.env.NEXT_PUBLIC_API_URL;
-
-async function editPermissions(id, body) {
-  const res = await fetch(path+"/permissions/"+id, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "PATCH",
-    body: JSON.stringify(body)
-  })
-
-  if(res.status === 401){
-    redirect("/");
-  } else {
-    modals.close("editRow");
-    notifications.show({
-      id: "response",
-      title: res.error? "Erro" : "Sucesso",
-      message: res?.error || "Editado com sucesso",
-      color: res?.error ? "red" : "green",
-      classNames: {description: "!text-slate-700"},
-    })
-  }
-
-  
-}
 const EditPermissionForm = ({defaultValues}) => {
+  const api = useApi();
+  const patchData = useCallback((id, body) => {
+    api.patch("/permissions/"+id, body)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.close("editRow"))
+      .catch(emitirNotificacao)
+  }, [])
   const form = useForm({
       mode: "uncontrolled",
       initialValues:{
@@ -41,13 +23,36 @@ const EditPermissionForm = ({defaultValues}) => {
         descricao: defaultValues.descricao
       }
     })
-  const handleSubmit = form.onSubmit(values => editPermissions(defaultValues.id, values))
+  const handleSubmit = form.onSubmit(values => patchData(defaultValues.id, values));
+  const handleDelete = () => {
+    api.delete("/permissions/"+defaultValues.id)
+      .then(handleResponse)
+      .then(emitirNotificacao)
+      .then(() => modals.closeAll())
+      .catch(emitirNotificacao)
+  }
+  const handleDeleteModal = () => {
+    modals.openConfirmModal({
+      title: `Tem certeza que deseja deletar a permissão ${defaultValues.resource}?`,
+      labels: { confirm: "Confirmar", cancel: "Cancelar"},
+      confirmProps: {color: "red"},
+      children: (
+        <div>
+          Permissão: {`${defaultValues.resource}:${defaultValues.action}`}, não será possível recuperar esses dados após deletar
+        </div>
+      ),
+      onConfirm: handleDelete
+    })
+  }
   return (
     <form>
       <TextInput classNames={{ label: "font-bold!"}} label="Recurso" {...form.getInputProps("resource")}/>
       <TextInput classNames={{ label: "font-bold!"}} label="Ação" {...form.getInputProps("action")}/>
       <TextInput classNames={{ label: "font-bold!"}} label="Descrição" {...form.getInputProps("descricao")}/>
-      <Flex justify={"flex-end"} mt={5} >
+      <Flex justify={"flex-end"} mt={5} gap={5}>
+        <Button color='red' onClick={handleDeleteModal}>
+          Deletar
+        </Button>
         <Button color='teal' onClick={handleSubmit}>
           Salvar
         </Button>

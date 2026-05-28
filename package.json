@@ -1,5 +1,5 @@
 {
-  "name": "cadastro-de-clientes",
+  "name": "mini-erp-monorepo",
   "private": true,
   "scripts": {
     "dev:api": "pnpm --filter api dev",

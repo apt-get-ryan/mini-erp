@@ -1,5 +1,4 @@
 function getSubmodules(modules, rota) {
-  console.log(modules);
   for (const mod of modules) {
     if(mod.rota === rota)
       return mod.submodules;
