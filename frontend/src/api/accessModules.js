@@ -1,6 +1,5 @@
 "use server"
 import { cookies } from 'next/headers';
-import { redirect, RedirectType } from "next/navigation";
 import jwt from 'jsonwebtoken'
 
 const JWT_KEY = process.env.JWT_KEY;
