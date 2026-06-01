@@ -18,15 +18,14 @@ function useApi() {
   const request = useCallback((path: string, options: RequestInit) => {
     options = {...fetchConfig, ...options};
     return fetch(apiPath+path, options)
-      .then((res) => {
+      .then(async (res) => {
         if(res.status === 401) {
           router.replace("/");
-          return res.json();
+          return { error: {
+            message: (await res.json()).error.message || "Erro"
+          }};
         }
-        return res.json();
-      })
-      .then((res )=> {
-        return res;
+        return await res.json();
       })
       .catch(rej => {throw Error("Falha na requisição")});
 
