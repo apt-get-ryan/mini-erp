@@ -1,6 +1,6 @@
 import express from 'express';
 import ClienteController from './ClienteController.js';
-import verifyToken from '@/middleware/authMiddleware.js';
+import {verifyToken} from '@/middleware/authMiddleware.js';
 
 const router = express.Router();
 

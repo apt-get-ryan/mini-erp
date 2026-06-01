@@ -1,7 +1,6 @@
 import express from "express";
 // import UserService from "@/services/rbac/UserService.js";
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
 import crypto from "crypto";
 import nodemailer from 'nodemailer';
 import {mailerService} from '@/services/MailerService.js';

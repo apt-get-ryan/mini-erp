@@ -1,6 +1,6 @@
 import express from 'express';
-import verifyToken from '@/middleware/authMiddleware.js';
-import checkPermission from '@/middleware/permissionMiddleware.js'
+import {verifyToken} from '@/middleware/authMiddleware.js';
+import {checkPermission} from '@/middleware/permissionMiddleware.js'
 
 import UserAuthController from './UserAuthController.js';
 import UserController from './UserController.js';

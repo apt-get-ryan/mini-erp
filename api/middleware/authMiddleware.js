@@ -1,8 +1,9 @@
-import jwt from 'jsonwebtoken';
 import { User } from "../models/models.js";
-import { getTokenData } from '../utils/jwt.js';
+import { getTokenData } from '../utils/jwt.ts';
+import { env } from '@/utils/env.ts';
 
-const JWT_KEY = process.env.JWT_KEY;
+const JWT_KEY = env.JWT_KEY;
+
 
 async function verifyToken(req, res, next) {
   const token = req.cookies?.token;
@@ -11,9 +12,10 @@ async function verifyToken(req, res, next) {
     return;
   }
   try {
-    const decoded = getTokenData(token);
+    const decoded = await getTokenData(token);
     
     const user = await User.findByPk(decoded.userId, { attributes: ["id", "token_version"]});
+
     if (!user) {
       return res.status(401).json({ error: "Usuário não encontrado" });
     }
@@ -21,11 +23,6 @@ async function verifyToken(req, res, next) {
     if (user.token_version !== decoded.tokenVersion) {
       return res.status(401).json({ error: "Token inválido" });
     }
-    req.user = {
-      id: decoded.userId,
-      permissions: decoded.userPermissions,
-      tokenVersion: decoded.tokenVersion
-    };
     next();
   } catch (error) {
       res.status(401).json({error: "Token inválido."});
@@ -33,4 +30,4 @@ async function verifyToken(req, res, next) {
   
 }
 
-export default verifyToken;
+export { verifyToken };

@@ -4,9 +4,6 @@ import crmRouter from './crm/crmRouter.js';
 import { HttpError } from '@/utils/HttpError.ts';
 import writeLog from '@/utils/Logger.js';
 
-/*import verifyToken from '../midlleware/authMiddleware.js';
-import checkPermission from '../midlleware/permissionMiddleware.js'*/
-
 const router = express.Router();
 
 router.use(rbacRouter);

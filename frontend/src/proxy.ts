@@ -7,7 +7,7 @@ const JWT_ALG = process.env.JWT_ALG;
 type Module = {
   rota: string
 };
-export async function middleware(req) {
+export default async function proxy(req) {
   if(!JWT_KEY || !JWT_ALG) {
     throw new Error();
   }
@@ -17,7 +17,7 @@ export async function middleware(req) {
     return NextResponse.redirect(new URL("/", req.url));
   }
   try {
-    const secret = new TextEncoder().encode(JWT_KEY)
+    const secret = new TextEncoder().encode(JWT_KEY);
     const {payload} = await jwtVerify(token, secret, {
       algorithms: [JWT_ALG]
     });

@@ -1,13 +1,16 @@
 "use server"
 import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken'
+import { jwtVerify } from 'jose';
+import { env } from '@/utils/env';
 
-const JWT_KEY = process.env.JWT_KEY;
+const JWT_KEY = env.JWT_KEY;
+const JWT_ALG = env.JWT_ALG;
 
 export default async function accessModules() {
   const token = (await cookies()).get("token").value;
-  const decoded = jwt.verify(token, JWT_KEY);
-  const accessibleModules = decoded.accessibleModules;
+  const secret = new TextEncoder().encode(JWT_KEY);
+  const {payload} = await jwtVerify(token, secret, { algorithms: [JWT_ALG] });
+  const accessibleModules = payload.accessibleModules;
   const map = {};
   accessibleModules.forEach(m => {
     delete m.accessPermission;

@@ -1,9 +1,10 @@
-import jwt from 'jsonwebtoken'
-import { getTokenData } from '../utils/jwt.js';
+import { getTokenData } from '../utils/jwt.ts';
+import { env } from '@/utils/env.ts';
 
-const JWT_KEY = process.env.JWT_KEY;
-/** @param {Array} permissionsRequired  */
-function checkPermission(permissionsRequired) {
+const JWT_KEY = env.JWT_KEY;
+
+
+function checkPermission(permissionsRequired: string[]) {
   return async (req, res, next) => {
     const token = req.cookies?.token;
     if(!token) {
@@ -12,7 +13,7 @@ function checkPermission(permissionsRequired) {
     }
     
     try {
-      const decoded = getTokenData(token);
+      const decoded = await getTokenData(token);
       const hasPermission = validatePermissions(permissionsRequired, decoded.userPermissions);
       if (!hasPermission) {
         res.status(403).json({error: "Permissão de acesso ausente ou negada."})
@@ -24,11 +25,8 @@ function checkPermission(permissionsRequired) {
     }
   }
 }
-/** 
- * @param {Array<String>} list 
- * @param {Array<String>} required 
- */
-function validatePermissions(required, list) {
+
+function validatePermissions(required: string[], list: string[]) {
   return required.every(requirement => {
     // verifica se a permissão só pede qualquer resource de um determinado tipo
     // ou seja, nome do resource entre 2 "*"
@@ -42,4 +40,4 @@ function validatePermissions(required, list) {
 };
 
 
-export default checkPermission;
+export {checkPermission};
