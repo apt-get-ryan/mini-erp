@@ -7,7 +7,6 @@ const apiPath = process.env.NEXT_PUBLIC_API_URL;
 
 function useApi() {
   const fetchConfig = useMemo<RequestInit>(() => ({
-    //method: "GET",
     credentials: "include",
     cache: "no-store",
   }), []);
@@ -22,11 +21,8 @@ function useApi() {
       .then((res) => {
         if(res.status === 401) {
           router.replace("/");
-          return null;
+          return res.json();
         }
-        // if(!res.ok) {
-        //   throw Error("Falha na requisição");
-        // };
         return res.json();
       })
       .then((res )=> {
@@ -59,20 +55,10 @@ function useApi() {
   }
 }
 
-// function isResponseSuccessful(result) {
-//   if(Object.hasOwn(result, 'success'))
-//     return true;
-//   return false;
-// }
-
-// function extractRequestData(response) {
-//   if(isResponseSuccessful(response)) {
-//     return response.success.data;
-//   }
-//   throw new Error("Requisição falhou");
-// }
-
 function handleResponse(response : HttpErrorDTO | HttpSuccessDTO) {
+  if(!response) {
+    throw new Error("Resposta inválida");
+  }
   if("error" in response) {
     throw response;
   }

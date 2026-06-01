@@ -22,7 +22,6 @@ router.use((err, req, res, next) => {
 
   console.error(httpError.stack);
   writeLog(JSON.stringify(httpError.getResponse()))
-  
   return res.status(httpError.statusCode).send(httpError.getResponse());
 });
 

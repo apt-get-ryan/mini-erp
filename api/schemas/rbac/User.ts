@@ -61,5 +61,14 @@ const updateSchema = userSchema.partial().extend({
     error: "Ao menos um campo é necessário para performar uma edição."
   }
 );
-
-export {createSchema, updateSchema}
+const loginSchema = userSchema.omit({email: true, nome: true, is_active: true, is_verified: true, verification_code: true, token_version: true})
+const registerSchema = userSchema.extend({
+  verification_code: z
+    .string(),
+  is_verified: z
+    .boolean()
+    .default(true),
+  
+})
+export type User = z.infer<typeof userSchema>;
+export {createSchema, updateSchema, loginSchema, registerSchema}

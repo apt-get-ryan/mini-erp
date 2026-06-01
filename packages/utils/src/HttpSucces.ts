@@ -1,6 +1,6 @@
 export type SuccessData = {
   message: string,
-  data: unknown,
+  data: any,
   statusCode: number,
   details: any | null
 } 

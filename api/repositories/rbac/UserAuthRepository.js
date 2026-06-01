@@ -1,8 +1,11 @@
 import {User, Role, Permission, Module} from "@/models/models.js";
+import { HttpError } from "@/utils/HttpError.ts";
+import { createSchema } from "@/schemas/rbac/User.ts";
 
 const getUserByLogin = async (login) => {
   try {
-    let user = await User.findOne({
+    let userData = await User.findOne({
+      attributes: ['id', 'token_version', 'login', 'password'],
       where: {
         login: login,
         is_verified: true
@@ -11,7 +14,7 @@ const getUserByLogin = async (login) => {
         model: Role,
         through: { attributes: []},
         attributes: ['nome'],
-        required: true,
+        required: false,
         include: [{
           model: Permission,
           through: { attributes: []},
@@ -26,9 +29,11 @@ const getUserByLogin = async (login) => {
         }]
       }]
     });
-    
+    if(!userData) {
+      throw new HttpError("Usuário ou senha inválidos.", 401);
+    }
     let accessibleModules = [];
-    for(const r of user.Roles) {
+    for(const r of userData.Roles) {
       for(const p of r.Permissions) {
         const accessPermission = `${p.resource}:${p.action}`;
         for(const m of p.Modules) {
@@ -40,18 +45,50 @@ const getUserByLogin = async (login) => {
       if(a.sort_order != b.sort_order) return (b.sort_order - a.sort_order);
       return a.slug.localeCompare(b.slug);
     } );
-    const userPermissions = user.Roles.flatMap(r => r.Permissions).map(p => `${p.resource}:${p.action}`);
-    user = user.get({plain: true})
-    delete user.Roles;
-    return {user, accessibleModules, userPermissions};
+    const userPermissions = userData.Roles.flatMap(r => r.Permissions).map(p => `${p.resource}:${p.action}`);
+
+    const user = {id: userData.id, token_version: userData.token_version, password: userData.password}
+    return {user: user, accessibleModules, userPermissions};
   } catch (error) {
-    throw new Error(error);
+    throw HttpError.from(error);
+  }
+}
+
+const registerNewUser = async (data) => {
+  try {
+    const user = await User.create(data);
+    return user;
+  } catch (error) {
+    throw HttpError.from(error);
+  }
+}
+
+const validateUser = async (login, authCode) => {
+  try {
+
+    const [updatedRows] = await User.update({
+      is_verified: true,
+      verification_code: null
+    }, {
+      where: {
+        login: login,
+        verification_code: authCode,
+        is_verified: false
+      }
+    })
+    console.log("linhas atualizadas: "+updatedRows)
+    console.log(`retornando: ${updatedRows > 0}`)
+    return updatedRows > 0;
+  } catch (error) {
+    throw HttpError.from(error);
   }
 }
 
 
 const UserAuthRepository = {
-  getUserByLogin
+  getUserByLogin,
+  registerNewUser,
+  validateUser
 }
 
 export default UserAuthRepository;

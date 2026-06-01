@@ -1,20 +1,28 @@
 import { NextResponse } from "next/server";
-import jwt from 'jsonwebtoken'
+import { jwtVerify} from "jose";
 
-export const runtime = 'nodejs';
+const JWT_KEY = process.env.JWT_KEY;
+const JWT_ALG = process.env.JWT_ALG;
 
-export function middleware(req) {
+type Module = {
+  rota: string
+};
+export async function middleware(req) {
+  if(!JWT_KEY || !JWT_ALG) {
+    throw new Error();
+  }
 
   const token = req.cookies.get("token")?.value.trim();
   if(!token) {
     return NextResponse.redirect(new URL("/", req.url));
-
   }
   try {
-    const KEY = process.env.JWT_KEY;
-    const decoded = jwt.verify(token, KEY);
-    const permissions = decoded.userPermissions;
-    const accessibleModules = decoded.accessibleModules;
+    const secret = new TextEncoder().encode(JWT_KEY)
+    const {payload} = await jwtVerify(token, secret, {
+      algorithms: [JWT_ALG]
+    });
+    // const permissions = payload.userPermissions;
+    const accessibleModules = payload.accessibleModules as Module[];
     const url = req.nextUrl.pathname;
     if(url !== '/home' && !accessibleModules.some(m => m.rota === url))
       return NextResponse.redirect(new URL("/403", req.url));

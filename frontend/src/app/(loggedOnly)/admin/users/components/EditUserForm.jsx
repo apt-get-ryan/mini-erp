@@ -34,7 +34,7 @@ function EditUserForm({defaultValues}) {
   })
   const handleSubmit = form.onSubmit(values => {
     form.validate();
-    if(form.isValid) {
+    if(form.isValid()) {
       if(form.isDirty()) {
         patchData(values);
       } else {

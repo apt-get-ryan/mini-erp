@@ -30,7 +30,7 @@ function AddUserForm() {
   });
   const handleSubmit = form.onSubmit((values) => {
     form.validate();
-    if(form.isValid) {
+    if(form.isValid()) {
       postData(values)
     }
 

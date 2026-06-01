@@ -6,7 +6,7 @@ import { createTheme, MantineProvider } from "@mantine/core"
 import type { Metadata } from "next";
 
 export const metadata : Metadata = {
-  title: "Login",
+  title: "Login / Registro",
   description: "Entre para continuar",
   icons: "/icon.svg"
 };
