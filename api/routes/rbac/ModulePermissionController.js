@@ -8,7 +8,6 @@ router.get("/:id",
     const {id} = req.params;
     const modulePermission =  await ModulePermissionService.getAcessPermissionByModuleId(id);
     const permissionId = modulePermission.map(p => p.id)[0];
-    console.log(permissionId)
     return new HttpSuccess({
       data: permissionId
     }).send(res);

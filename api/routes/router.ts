@@ -17,7 +17,7 @@ router.use((req, res) => {
 router.use((err, req, res, next) => {
   const httpError = HttpError.from(err);
 
-  console.error(httpError.stack);
+  console.error(err);
   writeLog(JSON.stringify(httpError.getResponse()))
   return res.status(httpError.statusCode).send(httpError.getResponse());
 });

@@ -1,5 +1,6 @@
 import { Module, User, Role, Permission } from "@/models/models.js";
 import { HttpError } from '@/utils/HttpError.ts';
+import { Sequelize, literal } from "sequelize";
 
 const getModule = async (id) => {
   try {

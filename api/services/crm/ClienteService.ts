@@ -10,12 +10,12 @@ async function getCliente(id, options: FindOptions = undefined) {
   return await ClienteRepository.getCliente(id, options);
 }
 
-async function createCliente(data, options: FindOptions = undefined) {
-  createSchema.parse(data);
-  return await ClienteRepository.createCliente(data, options);
+async function createCliente(data) {
+  data = createSchema.parse(data);
+  return await ClienteRepository.createCliente(data);
 }
 async function patchCliente(id, data) {
-  updateSchema.parse(data);
+  data = updateSchema.parse(data);
   return await ClienteRepository.patchCliente(id, data);
 }
 async function deleteCliente(id) {

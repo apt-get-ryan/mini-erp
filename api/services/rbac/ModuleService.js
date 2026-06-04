@@ -19,6 +19,7 @@ const saveModule = async (data) => {
 }
 
 const updateModule = async (id, data) => {
+  console.log(data)
   data = updateSchema.parse(data);
   return await ModuleRepository.updateModule(id, data)
 }

@@ -52,7 +52,6 @@ const ManagePermissionsForm = ({roleId}) => {
   }, []);
 
   const handleSubmit = form.onSubmit(async (values) => {
-    console.log(values)
     putData(values);
   })
 

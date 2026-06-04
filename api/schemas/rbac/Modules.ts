@@ -6,7 +6,7 @@ export const moduleSchema = z.object({
   slug: z.string().max(100),
   rota: z.string().max(200).nullable(),
   icone: z.string().nullable(),
-  parent_id: z.number().positive().int().nullable(),
+  parent_id: z.coerce.number().positive().int().nullable(),
   sort_order: z.number().int().default(0),
   is_active: z.boolean().nullable().default(true)
 },

@@ -20,7 +20,6 @@ function EditUserForm({defaultValues}) {
       .then(() => modals.close("editRow"))
       .catch(emitirNotificacao)
   }
-  const [isSaving, setIsSaving] = useState(false);
   const form = useForm({
     mode: "uncontrolled",
     initialValues:{

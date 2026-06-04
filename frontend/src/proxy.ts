@@ -39,8 +39,7 @@ export const config = {
   matcher: [
     "/home",
     "/admin/:path*",
-    "/clientes",
-    "/produtos"
+    "/comercial/:path*",
 
   ]
 };

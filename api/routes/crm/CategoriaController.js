@@ -1,14 +1,14 @@
 import express from "express";
-import ClienteService from "@/services/crm/ClienteService.js";
+import CategoriaService from "@/services/crm/CategoriaService.js";
 import { HttpError } from "@/utils/HttpError.ts";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
 
 const router = express.Router();
 router.get("/",
   async (req, res) => {
-    const clientes = await ClienteService.getClientes();
+    const categorias = await CategoriaService.getCategorias();
     return new HttpSuccess({
-      data: clientes
+      data: categorias
     }).send(res);
   }
 );
@@ -16,9 +16,9 @@ router.get("/",
 router.post("/",
   async (req, res) => {
     const data = req.body;
-    await ClienteService.createCliente(data);
+    await CategoriaService.createCategoria(data);
     return new HttpSuccess({
-      message: "Cliente adicionado com sucesso."
+      message: "Categoria adicionado com sucesso."
     }).send(res);
   }
 );
@@ -27,9 +27,9 @@ router.patch("/:id",
   async (req, res) => {
     const {id} = req.params;
     const data = req.body;
-    await ClienteService.patchCliente(id, data);
+    await CategoriaService.patchCategoria(id, data);
     return new HttpSuccess({
-      message: "Cliente editado com sucesso."
+      message: "Categoria editado com sucesso."
     }).send(res);
   }
 )
@@ -37,13 +37,13 @@ router.patch("/:id",
 router.delete("/:id",
   async (req, res) => {
     const {id} = req.params;
-    await ClienteService.deleteCliente(id);
+    await CategoriaService.deleteCategoria(id);
     return new HttpSuccess({
-      message: "Cliente deletado com sucesso."
+      message: "Categoria deletado com sucesso."
     }).send(res);
   }
 )
 
-const ClienteController = router;
+const CategoriaController = router;
 
-export default ClienteController;
+export default CategoriaController;

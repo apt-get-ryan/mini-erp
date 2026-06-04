@@ -1,9 +1,7 @@
-import db from "@/database/database";
+import db from "@/database/database.js";
 import { DataTypes } from "sequelize";
 
-const Produtos = db.define(
-  "Produtos",
-  {
+const Produto = db.define("Produto", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,13 +9,19 @@ const Produtos = db.define(
     },
 
     nome: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      validate: {
+        len: {
+          args: [1, 100],
+          msg: "O nome deve ter entre 1 a 100 caracteres."
+        }
+      }
     },
 
     descricao: {
       type: DataTypes.STRING(200),
-      allowNull: false
+      allowNull: true
     },
 
     preco: {
@@ -29,11 +33,6 @@ const Produtos = db.define(
       type: DataTypes.INTEGER, // VALOR EM CENTAVOS, EM CENTAVOS
       allowNull: false
     },
-
-    categoria: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    }
   },
   {
     tableName: "produtos",
@@ -41,4 +40,4 @@ const Produtos = db.define(
   }
 );
 
-export default Produtos;
+export default Produto;
