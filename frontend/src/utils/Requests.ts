@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import type { HttpErrorDTO, HttpSuccessDTO, SuccessData} from "@shared/utils"
+import type { HttpErrorDTO, HttpSuccessDTO, SuccessData} from "@shared/utils";
 
 const apiPath = process.env.NEXT_PUBLIC_API_URL;
 

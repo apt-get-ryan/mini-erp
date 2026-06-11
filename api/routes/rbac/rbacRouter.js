@@ -18,12 +18,12 @@ import MeController from "./MeController.js";
 const router = express.Router();
 
 router.use("/auth", UserAuthController);
-router.use("/modules", verifyToken, checkPermission(["**module**"]), ModuleController);
-router.use("/users", verifyToken, checkPermission(["**user**"]), UserController);
-router.use("/roles", verifyToken, checkPermission(["**role**"]), RoleController);
-router.use("/userRoles", verifyToken, checkPermission(["**user_role**"]), UserRoleController);
-router.use("/permissions", verifyToken, checkPermission(["**permission**"]), PermissionController);
-router.use("/rolePermissions", verifyToken, checkPermission(["**role_permission**"]), RolePermissionController);
+router.use("/modules", verifyToken, checkPermission("**module**"), ModuleController);
+router.use("/users", verifyToken, checkPermission("**user**"), UserController);
+router.use("/roles", verifyToken, checkPermission("**role**"), RoleController);
+router.use("/userRoles", verifyToken, checkPermission("**user_role**"), UserRoleController);
+router.use("/permissions", verifyToken, checkPermission("**permission**"), PermissionController);
+router.use("/rolePermissions", verifyToken, checkPermission("**role_permission**"), RolePermissionController);
 router.use("/modulePermission", verifyToken, /*checkPermission(),*/ ModulePermissionController);
 router.use("/me", verifyToken, MeController);
 

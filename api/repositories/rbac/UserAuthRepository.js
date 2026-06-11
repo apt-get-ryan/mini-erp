@@ -10,49 +10,19 @@ const getUserByLogin = async (login) => {
         login: login,
         is_verified: true
       },
-      include: [{
-        model: Role,
-        through: { attributes: []},
-        attributes: ['nome'],
-        required: false,
-        include: [{
-          model: Permission,
-          through: { attributes: []},
-          attributes: ['resource', 'action'],
-          required: false,
-          include: [{
-            model: Module,
-            through: { attributes: []},
-            where: { is_active: true },
-            required: false
-          }]
-        }]
-      }]
     });
     if(!userData) {
       throw new HttpError("Usuário ou senha inválidos.", 401);
     }
-    let accessibleModules = [];
-    for(const r of userData.Roles) {
-      for(const p of r.Permissions) {
-        const accessPermission = `${p.resource}:${p.action}`;
-        for(const m of p.Modules) {
-          accessibleModules.push({...m.toJSON(), accessPermission: accessPermission })
-        }
-      }
-    }
-    accessibleModules = mergeSort(accessibleModules, (a, b) => {
-      if(a.sort_order != b.sort_order) return (b.sort_order - a.sort_order);
-      return a.slug.localeCompare(b.slug);
-    } );
-    const userPermissions = userData.Roles.flatMap(r => r.Permissions).map(p => `${p.resource}:${p.action}`);
 
-    const user = {id: userData.id, token_version: userData.token_version, password: userData.password}
-    return {user: user, accessibleModules, userPermissions};
+    const user = {id: userData.id, token_version: userData.token_version, password: userData.password, login: userData.login}
+    return {user: user } 
   } catch (error) {
     throw HttpError.from(error);
   }
 }
+
+
 
 const registerNewUser = async (data) => {
   try {

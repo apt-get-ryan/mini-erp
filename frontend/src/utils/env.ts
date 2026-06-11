@@ -8,5 +8,6 @@ function getEnv(name: string) {
 
 export const env = {
   JWT_KEY: getEnv("JWT_KEY"),
-  JWT_ALG: getEnv("JWT_ALG")
+  JWT_ALG: getEnv("JWT_ALG"),
+  API_URL: getEnv("NEXT_PUBLIC_API_URL")
 }

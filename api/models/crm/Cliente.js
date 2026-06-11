@@ -60,6 +60,10 @@ const Cliente = db.define(
       allowNull: true
     },
     
+  },
+  {
+    tableName: "clientes",
+    timestamps: true
   }
 );
 

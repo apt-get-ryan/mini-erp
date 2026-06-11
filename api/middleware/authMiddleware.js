@@ -13,18 +13,17 @@ async function verifyToken(req, res, next) {
   }
   try {
     const decoded = await getTokenData(token);
-    
     const user = await User.findByPk(decoded.userId, { attributes: ["id", "token_version"]});
-
     if (!user) {
       return res.status(401).json({ error: "Usuário não encontrado" });
     }
 
-    if (user.token_version !== decoded.tokenVersion) {
+    if (user.token_version !== decoded.token_version) {
       return res.status(401).json({ error: "Token inválido" });
     }
     next();
   } catch (error) {
+      console.log(error)
       res.status(401).json({error: "Token inválido."});
   }
   

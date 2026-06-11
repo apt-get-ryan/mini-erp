@@ -7,7 +7,6 @@ import ManagePermissionsForm from './ManagePermissionsForm';
 import { handleResponse, useApi } from '@/utils/Requests';
 import { useCallback } from 'react';
 import { emitirNotificacao } from '@/utils/Alertas';
-const path = process.env.NEXT_PUBLIC_API_URL;
 
 
 const EditRoleForm = ({defaultValues}) => {

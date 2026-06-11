@@ -1,19 +1,41 @@
-"use client"
-import { useModules } from '@/stores/modulesProvider'
-import { getSubmodules } from '@/utils/Modules';
 import ModuleCard from '@/components/Layout/ModuleCard/ModuleCard';
+import { cookies } from 'next/headers';
+import { env } from "@/utils/env";
+import { getModuleTree, getSubmodules } from '@/utils/Modules';
 
+const Admin = async () => {
+  try {
+    const cookieStore = await cookies();
+    const response = await fetch(env.API_URL+"/me/modules", {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      cache: "no-store"
+    }).then(r => r.json())
+    let modules = [];
+    if("success" in response) {
+      modules = getSubmodules(getModuleTree(response.success.data), "/admin");
+    }
 
-const Admin = () => {
-  let modules = useModules();
-  modules = (getSubmodules(modules, "/admin"));
-  return (
-    <div className='grid grid-cols-6 gap-4'>
-      {modules?.map((module) => {
-        return <ModuleCard key={module.id} title={module.nome} href={module.rota} icon={module.icone}/>
-      })}
+    if (!modules?.length) {
+      return (
+        <div className="flex justify-center items-start">
+          <span>Sem módulos para listar</span>
+        </div>
+      );
+    }
+    return (
+      <div className='grid grid-cols-6 gap-4'>
+        {modules?.map((module) => {
+          return <ModuleCard key={module.id} title={module.nome} href={module.rota} icon={module.icone}/>
+        })}
+      </div>
+    )
+  } catch (error) {
+    <div className="flex justify-center items-start">
+      <span>Erro ao carregar a páginas</span>
     </div>
-  )
+  }
 }
 
 export default Admin

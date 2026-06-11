@@ -4,9 +4,7 @@ const secret = new TextEncoder().encode(env.JWT_KEY);
 
 export interface TokenPayload extends JWTPayload {
   userId: number,
-  userPermissions: string[],
-  tokenVersion: number
-
+  token_version: number
 }
 
 async function verifyToken(token): Promise<TokenPayload> {

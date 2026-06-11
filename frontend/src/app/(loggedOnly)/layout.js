@@ -1,12 +1,7 @@
-
-//import React, { useEffect } from 'react'
 import Header from '@/components/Layout/Header/Header';
-import { ModulesProvider } from '@/stores/modulesProvider';
-import { cookies } from 'next/headers';
 import ContentBox from '@/components/Layout/ContentBox/ContentBox';
-import { Notifications, notifications } from '@mantine/notifications';
+import { Notifications } from '@mantine/notifications';
 import Breadcrumbs from '@/components/Layout/Breadcrumbs/Breadcrumbs';
-import accessModules from '@/api/accessModules';
 import 'mantine-datatable/styles.layer.css';
 import Footer from '@/components/Layout/Footer/Footer';
 
@@ -17,23 +12,19 @@ export const metadata = {
   }
 }
 
-const path = process.env.NEXT_PUBLIC_API_URL;
 const Layout = async ({children}) => {
-  let modules = await accessModules();
 
   return (
     <div className='grid grid-rows-[auto_auto_1fr_auto] min-h-dvh bg-base-400'>
       <Header/>
-      <ModulesProvider modules={modules}>
-        <div suppressHydrationWarning className='mx-auto container mt-2'>
-          <Breadcrumbs/>
-        </div>
-        <ContentBox className={"mx-auto container py-3  mt-1 mb-2.5"}>
-          {children}
-        </ContentBox>
-        <Footer/>
-        <Notifications/>
-      </ModulesProvider>
+      <div className='mx-auto min-h-7 container mt-2 ml-4'>
+        <Breadcrumbs/>
+      </div>
+      <ContentBox className={"mx-auto container py-3  mt-1 mb-2.5"}>
+        {children}
+      </ContentBox>
+      <Footer/>
+      <Notifications/>
     </div>
   )
 }

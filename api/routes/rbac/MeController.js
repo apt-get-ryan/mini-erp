@@ -2,46 +2,64 @@ import express from "express";
 import ModuleService from "@/services/rbac/ModuleService.js";
 import UserAuthService from "@/services/rbac/UserAuthService.js";
 import {getTokenData} from "@/utils/jwt.js";
+import HttpSuccess from "@/utils/HttpSuccess.ts";
+import { env } from "@/utils/env.ts";
+import { SignJWT } from "jose";
+import MeService from "@/services/rbac/MeService.js";
+import { HttpError } from "@/utils/HttpError.ts";
 
 const router = express.Router();
 
-router.get("/modules",
+router.post("/refresh", 
   async (req, res) => {
-    try {
-      const {userId} = getTokenData(req.cookies.token);
-      let modules = [];
-      modules = await ModuleService.getAcessibleModules(userId);
-      
-      res.send(modules);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({error: error.message});
+    const currToken = req.cookies?.token;
+    if(currToken) {
+      const decoded = await getTokenData(currToken);
+      const now = Math.floor(Date.now() / 1000)
+      const remainTime = decoded.exp - now; // em segundos
+      const newTokenContent = await UserAuthService.getUserById(decoded.userId);
+      console.log(newTokenContent)
+
+      const secret = new TextEncoder().encode(env.JWT_KEY)
+      const newToken = await new SignJWT(newTokenContent)
+        .setProtectedHeader({ alg: env.JWT_ALG})
+        .setIssuedAt()
+        .setExpirationTime(`${remainTime}s`)
+        .sign(secret);
+      res.cookie("token", newToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 1000 * remainTime, 
+        sameSite: "lax"
+      })
     }
+    return new HttpSuccess({}).send(res);
   }
 );
 
-router.get("/permissions",
+router.post(
+  "/have/route",
   async (req, res) => {
-    try {
-      const { userPermissions } = getTokenData(req.cookies.token);
-      res.send(userPermissions)
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({error: error.message});
-    }
+    const token = req.cookies?.token;
+    const id = (await getTokenData(token)).userId;
+    console.log(id)
+    const {route} = req.body;
+    const haveAccess = await MeService.checkIfUserCanAccessRoute(id, route);
+    return new HttpSuccess({
+      data: haveAccess
+    }).send(res);
   }
-)
+);
 
-router.get("/",
+router.get(
+  "/modules",
   async (req, res) => {
-    try {
-      const {userId} = getTokenData(req.cookies.token);
-      const {user, accessibleModules, userPermissions} = await UserAuthService.getUserById(userId);
-      res.send(user);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({error: error.message});
-    }
+    const token = req.cookies?.token;
+    const id = (await getTokenData(token)).userId;
+    const modules = await MeService.getModulesByUserId(id);
+    return new HttpSuccess({
+      data: modules
+    }).send(res);
   }
 )
 

@@ -1,4 +1,4 @@
-import db from "@/database/database";
+import db from "@/database/database.js";
 import { DataTypes } from "sequelize";
 
 const PedidoItem = db.define(
@@ -23,11 +23,10 @@ const PedidoItem = db.define(
     quantidade: {
       type: DataTypes.NUMBER,
       allowNull: false
-    },
-    
-    pago: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: FALSE
     }
+  },
+  {
+    tableName: "pedido_itens",
+    timestamps: true
   }
 )
