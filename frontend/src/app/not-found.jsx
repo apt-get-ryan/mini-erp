@@ -1,6 +1,8 @@
 import React from 'react';
 import '@mantine/core/styles.layer.css';
-
+export const metadata = {
+  title: "404 | Mini-ERP"
+}
 const NotFound = () => {
   return (
     <div className='grid place-items-center min-h-dvh bg-base-400'>

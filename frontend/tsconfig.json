@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/components/Layout/Auth/Register.jsx"  ],
+],
   "exclude": [
     "node_modules"
   ]

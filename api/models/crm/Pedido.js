@@ -11,9 +11,13 @@ const Pedido = db.define(
     },
     id_cliente: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "clientes",
+        key: "id"
+      }
     },
     valor_pago: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER // valor em centavos
     }
   },
   {
@@ -22,4 +26,4 @@ const Pedido = db.define(
   }
 );
 
-Pedido.hasMany()
+export default Pedido;

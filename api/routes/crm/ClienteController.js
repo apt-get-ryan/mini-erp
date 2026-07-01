@@ -6,7 +6,15 @@ import HttpSuccess from "@/utils/HttpSuccess.ts";
 const router = express.Router();
 router.get("/",
   async (req, res) => {
-    const clientes = await ClienteService.getClientes();
+    const simplified = req.query.simplified === "true";
+    let clientes = [];
+    if(simplified) {
+      clientes = await ClienteService.getClientes({
+        attributes: ["id", "nomeFantasia"]
+      });
+    } else {
+      clientes = await ClienteService.getClientes();
+    }
     return new HttpSuccess({
       data: clientes
     }).send(res);

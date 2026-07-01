@@ -17,7 +17,7 @@ const Layout = async ({children}) => {
   return (
     <div className='grid grid-rows-[auto_auto_1fr_auto] min-h-dvh bg-base-400'>
       <Header/>
-      <div className='mx-auto min-h-7 container mt-2 ml-4'>
+      <div className='mx-auto min-h-7 container mt-2'>
         <Breadcrumbs/>
       </div>
       <ContentBox className={"mx-auto container py-3  mt-1 mb-2.5"}>

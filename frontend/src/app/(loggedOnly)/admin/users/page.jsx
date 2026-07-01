@@ -61,9 +61,7 @@ function Page() {
         columns={[
           {
             accessor: 'id',
-            // 👇 this column has a custom title
             title: '#',
-            // 👇 right-align column
             textAlign: 'right',
             sortable: true
           },

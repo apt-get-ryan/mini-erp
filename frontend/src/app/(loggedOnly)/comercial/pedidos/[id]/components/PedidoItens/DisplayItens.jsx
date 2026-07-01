@@ -1,15 +1,18 @@
 "use client";
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useApi, handleApiFillTable, handleResponse, getSuccessData } from '@/utils/Requests';
 import { useSortedData } from '@/utils/TableData';
 import { DataTable } from 'mantine-datatable';
-import { Button, NumberFormatter  } from '@mantine/core';
+import { Button, NumberFormatter } from '@mantine/core';
 import dayjs from 'dayjs';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
+import AddPedidoItemForm from "./AddPedidoItemForm";
+import EditPedidoItemForm from "./EditPedidoItemForm";
 
-function Page() {
+function DisplayItens({idPedido}) {
+  const isFirstRun = useRef(true);
   const api = useApi();
   const router = useRouter();
   const [sortStatus, setSortStatus] = useState({
@@ -21,44 +24,29 @@ function Page() {
   const sortedData = useSortedData(data, sortStatus);
   const fillTable = useCallback(async () => {
       setFetching(true);
-      handleApiFillTable(api.get("/pedidos"), setData, setFetching);
+      handleApiFillTable(api.get("/pedidos/"+idPedido+"/itens"), setData, setFetching);
     }, []);
   useEffect(() => {
-    fillTable()
+    if(!isFirstRun.current) return;
+    isFirstRun.current = false;
+    fillTable();
   }, []);
-  const handleAddPedido = async () => {
-    try {
-      const idNovoPedido = await api.post("/pedidos").then(handleResponse).then(getSuccessData).catch(r => {throw r});
-      router.push(`/comercial/pedidos/${idNovoPedido}`)
-
-    } catch ({error}) {
-      notifications.show({
-        id: "notifyResponseResult",
-        title: "Erro",
-        message: error.message,
-        color: "red",
-        classNames: {description: "!text-slate-700"}
-      })
-    }
-  }
   return (
-    <>
+    <div>
       <>
-      <Button
-        onClick={() => {
-          modals.openConfirmModal({
-            title: `Tem certeza que deseja adicionar pedido?`,
-            labels: { confirm: "Confirmar", cancel: "Cancelar"},
-            confirmProps: {color: "teal"},
-            children: (
-              <div>
-                Você está adicionando um novo pedido.
-              </div>
-            ),
-            onConfirm: handleAddPedido
+        <Button onClick={() => {
+          modals.open({
+            modalId: "addRow",
+            title: `Adicionando item ao pedido #${idPedido}`,
+            onClose: () => {
+              fillTable();
+              router.refresh();
+            },
+            children:(<AddPedidoItemForm idPedido={idPedido}/>)
           })
-        }}
-      >Adicionar</Button>
+        }}>
+          Adicionar
+        </Button>
       </>
       <DataTable
         minHeight={200}
@@ -83,21 +71,21 @@ function Page() {
             sortable: true
           },
           {
-            accessor: 'cliente.nomeFantasia',
-            title: "Nome fantasia",
+            accessor:'produto.nome',
+            title: "Produto",
             sortable: true
+            
           },
           {
-            accessor: 'valor_pago',
-            title: 'Valor pago',
+            accessor: 'valor',
+            title: 'Valor',
             sortable: true,
-            render: ({valor_pago}) => <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2}  fixedDecimalScale value={valor_pago / 100} />
+            render: ({valor}) => <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2}  fixedDecimalScale value={valor / 100}/>
           },
           {
-            accessor: 'valor_total',
-            title: 'Valor total',
-            sortable: true,
-            render: ({valor_total}) => <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2} fixedDecimalScale value={valor_total / 100}/>
+            accessor: 'quantidade',
+            title: 'Quantidade',
+            sortable: true
           },
           {
             accessor: 'createdAt', 
@@ -113,11 +101,21 @@ function Page() {
           }
         ]}
         onRowClick={({record}) => {
-          router.push(`/comercial/pedidos/${record.id}`)
+          modals.open({
+            modalId: "editRow",
+            title: `Editando item #${record.id} do pedido #${idPedido}`,
+            onClose: () => {
+              fillTable();
+              router.refresh();
+            },
+            children: (
+              <EditPedidoItemForm idPedido={idPedido} idItem={record.id}/>
+            )
+          })
         }}
       />
-    </>
+    </div>
   )
 }
 
-export default Page;
+export default DisplayItens

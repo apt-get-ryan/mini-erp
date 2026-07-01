@@ -46,8 +46,6 @@ const validateUser = async (login, authCode) => {
         is_verified: false
       }
     })
-    console.log("linhas atualizadas: "+updatedRows)
-    console.log(`retornando: ${updatedRows > 0}`)
     return updatedRows > 0;
   } catch (error) {
     throw HttpError.from(error);

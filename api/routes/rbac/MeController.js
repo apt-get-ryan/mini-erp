@@ -18,7 +18,6 @@ router.post("/refresh",
       const now = Math.floor(Date.now() / 1000)
       const remainTime = decoded.exp - now; // em segundos
       const newTokenContent = await UserAuthService.getUserById(decoded.userId);
-      console.log(newTokenContent)
 
       const secret = new TextEncoder().encode(env.JWT_KEY)
       const newToken = await new SignJWT(newTokenContent)
@@ -42,7 +41,6 @@ router.post(
   async (req, res) => {
     const token = req.cookies?.token;
     const id = (await getTokenData(token)).userId;
-    console.log(id)
     const {route} = req.body;
     const haveAccess = await MeService.checkIfUserCanAccessRoute(id, route);
     return new HttpSuccess({

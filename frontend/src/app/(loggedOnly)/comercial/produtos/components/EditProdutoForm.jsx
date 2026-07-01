@@ -10,13 +10,9 @@ import { modals } from '@mantine/modals';
 
 function EditProdutoForm({id}) {
   const api = useApi();
-  const isFirstRun = useRef(false);
+  const isFirstRun = useRef(true);
   const [loading, setLoading] = useState(true);
   const [categorias, setCategorias] = useState([]);
-  const getData = useCallback(async (id) => {
-    let r = await api.get("/produtos/"+id);
-    return r.success.data;
-  })
   const patchData = useCallback(async (body) => {
       api.patch("/produtos/"+id, body)
         .then(handleResponse)
@@ -38,8 +34,8 @@ function EditProdutoForm({id}) {
   });
 
   useEffect(() => {
-    if(isFirstRun.current) return;
-    isFirstRun.current = true;
+    if(!isFirstRun.current) return;
+    isFirstRun.current = false;
     (async () => {
       api.get("/categorias")
         .then(handleResponse)
@@ -49,6 +45,7 @@ function EditProdutoForm({id}) {
       if("error" in r)
         emitirNotificacao(r);
       form.setInitialValues(r.success.data);
+      form.setDirty(r.success.data);
       form.setValues(r.success.data);
       setLoading(false);
     })();
@@ -58,7 +55,6 @@ function EditProdutoForm({id}) {
     form.validate();
     if(form.isValid()) {
       const treatedData = {...values, preco: Math.round(values.preco * 100), custo: Math.round(values.custo * 100)}
-      console.log(treatedData);
       patchData(treatedData);
     }
   })

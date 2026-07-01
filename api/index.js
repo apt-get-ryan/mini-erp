@@ -22,7 +22,7 @@ app.use(cors({
 
 app.use(router);
 
-db.sync();
+// db.sync();
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

@@ -7,7 +7,14 @@ import z from "zod";
 const router = express.Router();
 router.get("/",
   async (req, res) => {
-    const produtos = await ProdutoService.getProdutos();
+    const simplified = req.query.simplified === "true";
+    let produtos = [];
+    if(simplified)
+      produtos = await ProdutoService.getProdutos({
+        attributes: ["id", "nome", "preco"]
+      });
+    else
+      produtos = await ProdutoService.getProdutos();
     return new HttpSuccess({
       data: produtos
     }).send(res);
@@ -16,10 +23,8 @@ router.get("/",
 
 router.get("/:id",
   async (req, res) => {
-    console.log("chamou")
     const id = z.coerce.number().int().nonnegative().parse(req.params.id);
     const produto = await ProdutoService.getProduto(id);
-    console.log(produto)
     return new HttpSuccess({
       data: produto
     }).send(res);

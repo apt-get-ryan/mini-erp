@@ -27,9 +27,7 @@ const getUserByLogin = async (data) => {
   const tokenContent = {
     userId: user.id,
     userLogin: user.login,
-    // userPermissions: userPermissions,
     token_version: user.token_version,
-    // accessibleModules: accessibleModules
   };
   const secret = new TextEncoder().encode(JWT_KEY)
   const token = await new SignJWT(tokenContent)
@@ -38,24 +36,6 @@ const getUserByLogin = async (data) => {
     .setExpirationTime('10h')
     .sign(secret);
   return token;
-}
-
-const getUserById = async (id) => {
-  id = z.number().int().nonnegative().parse(id);
-  const {user, accessibleModules, userPermissions} = await UserAuthRepository.getUserById(id);
-  const tokenContent = {
-    userId: user.id,
-    userPermissions: userPermissions,
-    token_version: user.token_version,
-    accessibleModules: accessibleModules
-  };
-  // const secret = new TextEncoder().encode(JWT_KEY)
-  // const token = await new SignJWT(tokenContent)
-  //   .setProtectedHeader({ alg: JWT_ALG})
-  //   .setIssuedAt()
-  //   .setExpirationTime('10h')
-  //   .sign(secret);
-  return tokenContent;
 }
 
 const registerNewUser = async (data) => {
@@ -73,7 +53,6 @@ const validateUser = async (login, authCode) => {
 }
 const UserAuthService = {
   getUserByLogin,
-  getUserById,
   registerNewUser,
   validateUser
 }

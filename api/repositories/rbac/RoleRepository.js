@@ -11,7 +11,6 @@ const getRole = async (id) => {
 
 const getRoles = async () => {
   try {
-    //console.log(Object.keys(Role.rawAttributes).join(', '))
     return await Role.findAll();
   } catch(error) {
     throw HttpError.from(error);

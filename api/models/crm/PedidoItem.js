@@ -11,17 +11,26 @@ const PedidoItem = db.define(
     },
 
     id_pedido: {
-      type: DataTypes.NUMBER,
-      allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "pedidos",
+        key: "id"
+      }
     },
 
     id_produto: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+
+    valor: {
+      type: DataTypes.INTEGER, // valor em centavos,
       allowNull: false
     },
 
     quantidade: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.DECIMAL(10, 3),
       allowNull: false
     }
   },
@@ -29,4 +38,6 @@ const PedidoItem = db.define(
     tableName: "pedido_itens",
     timestamps: true
   }
-)
+);
+
+export default PedidoItem;
