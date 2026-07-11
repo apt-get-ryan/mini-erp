@@ -67,7 +67,7 @@ router.post("/:idPedido/cliente",
       message: "Cliente vinculado ao pedido com sucesso."
     }).send(res);
   }
-)
+);
 
 router.use(PedidoItensController);
 

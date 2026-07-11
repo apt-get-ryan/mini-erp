@@ -25,7 +25,7 @@ function Display({id, data}) {
           <div className="stat-value">{updatedAt}</div>
         </div>
       </div>
-      <ActionsPedido />
+      <ActionsPedido id={id}/>
       <div className="divider font-bold">Itens do pedido</div>
       <DisplayItens idPedido={id} />
     </section>
