@@ -2,16 +2,16 @@
 import React from 'react';
 import { Button } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import PaymentForm from './PaymentForm';
+import PagamentoForm from './PagamentoForm';
 
 
 
-function ActionsPedido({id}) {
+function ActionsPedido({idPedido, data}) {
   const handlePayment = () => {
     modals.open({
       modalId: "payment",
       title: "Lançar pagamento",
-      children: (<PaymentForm />)
+      children: (<PagamentoForm idPedido={idPedido} data={data}/>)
     })
   }
   return (

@@ -4,6 +4,7 @@ import { HttpError } from "@/utils/HttpError.ts";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
 import { z } from "zod";
 import PedidoItensController from "./PedidoItensController.js";
+import PagamentoController from "./PagamentoController.js";
 
 const router = express.Router();
 router.get("/",
@@ -70,6 +71,7 @@ router.post("/:idPedido/cliente",
 );
 
 router.use(PedidoItensController);
+router.use(PagamentoController);
 
 const PedidoController = router;
 

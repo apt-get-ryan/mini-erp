@@ -69,7 +69,7 @@ function AddPedidoItemForm({idPedido}) {
       <NumberInput key={form.key("valor")} prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2} fixedDecimalScale min={0} classNames={{ label: "font-bold!"}} label="Valor" {...form.getInputProps("valor")}/>
       <NumberInput key={form.key("quantidade")} thousandSeparator='.' decimalSeparator=',' decimalScale={3} fixedDecimalScale min={0.001} max={9_999_999.999} classNames={{ label: "font-bold!"}} label="Quantidade" {...form.getInputProps("quantidade")}/>
       <Alert variant='default' title="Valor total do item" mt={8} classNames={{ root: "py-2! px-4!", body: "gap-0.5!"}}>
-        R$ <NumberFormatter thousandSeparator='.' decimalSeparator=',' decimalScale={3} value={form.getValues().valor * form.getValues().quantidade}/>
+        <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={3} value={form.getValues().valor * form.getValues().quantidade}/>
       </Alert>
       <Flex justify={"flex-end"} mt={5}>
         <Button color="teal" onClick={handleSubmit}>

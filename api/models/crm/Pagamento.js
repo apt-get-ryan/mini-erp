@@ -1,26 +1,31 @@
 import db from "@/database/database.js";
 import { DataTypes } from "sequelize";
 
-const Pedido = db.define(
-  "Pedido",
+const Pagamento = db.define(
+  "Pagamento",
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    id_cliente: {
+
+    id_pedido: {
       type: DataTypes.INTEGER,
       references: {
-        model: "clientes",
+        model: "pedidos",
         key: "id"
       }
     },
+
+    valor: {
+      type: DataTypes.INTEGER, // valor em centavos
+    }
   },
   {
-    tableName: "pedidos",
-    timestamps: true
+    tableName: "pagamentos",
+    timestamps: true,
   }
-);
+)
 
-export default Pedido;
+export default Pagamento;

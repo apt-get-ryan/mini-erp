@@ -1,14 +1,13 @@
-import { Pedido, Cliente, PedidoItem } from "@/models/models.js";
+import { Pedido, Cliente, PedidoItem, Pagamento } from "@/models/models.js";
 import { HttpError } from "@/utils/HttpError.ts";
 import { fn, col, literal } from "sequelize";
 
 async function getPedidos(options = undefined) {
   try {
-    return await Pedido.findAll({
+    let data = await Pedido.findAll({
       attributes: [
         "id",
         "id_cliente",
-        "valor_pago",
         "createdAt",
         "updatedAt",
         [
@@ -18,6 +17,14 @@ async function getPedidos(options = undefined) {
             )
           , 0),
           "valor_total"
+        ],
+        [
+          fn("COALESCE", 
+            fn("SUM",
+              col("pagamentos.valor")
+            )
+          , 0),
+          "valor_pago"
         ]
       ],
       include: [
@@ -32,12 +39,20 @@ async function getPedidos(options = undefined) {
           as: "itens",
           attributes: [],
           required: false
+        },
+        {
+          model: Pagamento,
+          as: "pagamentos",
+          attributes: [],
+          required: false
         }
       ],
       group: [
         "Pedido.id"
       ]
     });
+    console.log(data);
+    return data;
   } catch (error) {
     throw HttpError.from(error);
   }
@@ -49,7 +64,6 @@ async function getPedido(id) {
       attributes: [
         "id",
         "id_cliente",
-        "valor_pago",
         "createdAt",
         "updatedAt",
         [
@@ -59,6 +73,14 @@ async function getPedido(id) {
             )
           , 0),
           "valor_total"
+        ],
+        [
+          fn("COALESCE", 
+            fn("SUM",
+              col("pagamentos.valor")
+            )
+          , 0),
+          "valor_pago"
         ]
       ],
       include: [
@@ -71,6 +93,12 @@ async function getPedido(id) {
         {
           model: PedidoItem,
           as: "itens",
+          attributes: [],
+          required: false
+        },
+        {
+          model: Pagamento,
+          as: "pagamentos",
           attributes: [],
           required: false
         }

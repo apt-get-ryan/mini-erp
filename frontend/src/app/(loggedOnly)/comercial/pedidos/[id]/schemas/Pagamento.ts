@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-const paymentSchema = z.object({
-  payment: z.number().positive("O valor do pagamento deve ser maior que 0")
+const pagamentoSchema = z.object({
+  valor: z.number().positive("O valor do pagamento deve ser maior que 0")
 },
 {
   error: (issue) => {
@@ -14,7 +14,7 @@ const paymentSchema = z.object({
 
 
 export {
-  paymentSchema
+  pagamentoSchema
 }
 
-export type Payment = z.infer<typeof paymentSchema>
+export type Pagamento = z.infer<typeof pagamentoSchema>

@@ -6,6 +6,8 @@ import ProdutoCategoria from "./ProdutoCategoria.js";
 import Pedido from "./Pedido.js";
 import PedidoItem from "./PedidoItem.js";
 
+import Pagamento from "./Pagamento.js"
+
 Categoria.belongsToMany(
   Produto,
   {
@@ -80,10 +82,26 @@ const atualizarPedido = async (pedidoItem, options) => {
 PedidoItem.addHook("afterDestroy", atualizarPedido)
 PedidoItem.addHook("afterSave", atualizarPedido)
 
+Pagamento.belongsTo(
+  Pedido,
+  {
+    as: "pagamentos",
+    foreignKey: "id_pedido"
+  }
+);
+Pedido.hasMany(
+  Pagamento,
+  {
+    as: "pagamentos",
+    foreignKey: "id_pedido",
+  }
+)
+
 export { 
   Cliente,
   Produto,
   Categoria,
   Pedido,
-  PedidoItem
+  PedidoItem,
+  Pagamento
 };
