@@ -6,14 +6,18 @@ import React, { useCallback } from 'react'
 import { pagamentoSchema } from '../../schemas/Pagamento';
 import { emitirNotificacao } from '@/utils/Alertas';
 import { handleResponse } from '@/utils/Requests';
+import { useRouter } from 'next/navigation';
+import { modals } from '@mantine/modals';
 
 function PaymentForm({idPedido, data}) {
   const api = useApi();
+  const router = useRouter();
   const postData = useCallback((data) => {
       api.post("/pedidos/"+idPedido+"/pagamentos", data)
         .then(handleResponse)
         .then(emitirNotificacao)
-        .then(() => modals.close("payment"))
+        .then(() => router.refresh())
+        .then(() => modals.closeAll())
         .catch(emitirNotificacao)
     }, [api, idPedido]);
   const form = useForm({
