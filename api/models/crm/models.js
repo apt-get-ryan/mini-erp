@@ -63,10 +63,10 @@ Pedido.belongsTo(
   }
 );
 
-const atualizarPedido = async (pedidoItem, options) => {
+const atualizarPedido = async (data, options) => {
   try {
     const now = new Date();
-    const pedido = await Pedido.findByPk(pedidoItem.id_pedido);
+    const pedido = await Pedido.findByPk(data.id_pedido);
     pedido.set('updatedAt', new Date());
     pedido.changed('updatedAt', true);
     /*
@@ -86,7 +86,8 @@ Pagamento.belongsTo(
   Pedido,
   {
     as: "pagamentos",
-    foreignKey: "id_pedido"
+    foreignKey: "id_pedido",
+    onDelete: "CASCADE"
   }
 );
 Pedido.hasMany(
@@ -96,6 +97,8 @@ Pedido.hasMany(
     foreignKey: "id_pedido",
   }
 )
+
+Pagamento.addHook("afterSave", atualizarPedido);
 
 export { 
   Cliente,
