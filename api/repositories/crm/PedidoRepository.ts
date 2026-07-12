@@ -11,19 +11,19 @@ async function getPedidos(options = undefined) {
         "createdAt",
         "updatedAt",
         [
-          fn("COALESCE", 
-            fn("SUM",
-              literal("`itens`.`valor` * `itens`.`quantidade`")
-            )
-          , 0),
+          literal(`(
+            SELECT COALESCE(SUM(itens.valor * itens.quantidade), 0)
+            FROM pedido_itens AS itens
+            WHERE itens.id_pedido = Pedido.id
+          )`),
           "valor_total"
         ],
         [
-          fn("COALESCE", 
-            fn("SUM",
-              col("pagamentos.valor")
-            )
-          , 0),
+          literal(`(
+            SELECT COALESCE(SUM(pagamentos.valor), 0)
+            FROM pagamentos AS pagamentos
+            WHERE pagamentos.id_pedido = Pedido.id
+          )`),
           "valor_pago"
         ]
       ],
@@ -34,18 +34,6 @@ async function getPedidos(options = undefined) {
           attributes: ["nomeFantasia"],
           required: false
         },
-        {
-          model: PedidoItem,
-          as: "itens",
-          attributes: [],
-          required: false
-        },
-        {
-          model: Pagamento,
-          as: "pagamentos",
-          attributes: [],
-          required: false
-        }
       ],
       group: [
         "Pedido.id"
@@ -67,19 +55,19 @@ async function getPedido(id) {
         "createdAt",
         "updatedAt",
         [
-          fn("COALESCE", 
-            fn("SUM",
-              literal("`itens`.`valor` * `itens`.`quantidade`")
-            )
-          , 0),
+          literal(`(
+            SELECT COALESCE(SUM(itens.valor * itens.quantidade), 0)
+            FROM pedido_itens AS itens
+            WHERE itens.id_pedido = Pedido.id
+          )`),
           "valor_total"
         ],
         [
-          fn("COALESCE", 
-            fn("SUM",
-              col("pagamentos.valor")
-            )
-          , 0),
+          literal(`(
+            SELECT COALESCE(SUM(pagamentos.valor), 0)
+            FROM pagamentos AS pagamentos
+            WHERE pagamentos.id_pedido = Pedido.id
+          )`),
           "valor_pago"
         ]
       ],
@@ -90,18 +78,6 @@ async function getPedido(id) {
           attributes: ["nomeFantasia"],
           required: false
         },
-        {
-          model: PedidoItem,
-          as: "itens",
-          attributes: [],
-          required: false
-        },
-        {
-          model: Pagamento,
-          as: "pagamentos",
-          attributes: [],
-          required: false
-        }
       ],
       group: [
         "Pedido.id"
