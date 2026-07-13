@@ -38,7 +38,7 @@ function ActionsPedido({idPedido, data}) {
   }
   return (
     <div className='flex justify-end px-2 py-3.5 gap-1.25'>
-      <Button color='yellow' onClick={handlePaymentModal}>
+      <Button color='dark' onClick={handlePaymentModal}>
         Lançar pagamento
       </Button >
       <Button color='red' onClick={handleDeleteModal}>

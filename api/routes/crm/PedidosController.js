@@ -5,6 +5,7 @@ import HttpSuccess from "@/utils/HttpSuccess.ts";
 import { z } from "zod";
 import PedidoItensController from "./PedidoItensController.js";
 import PagamentoController from "./PagamentoController.js";
+import { updateSchema } from "@/schemas/crm/Pedido.ts";
 
 const router = express.Router();
 router.get("/",
@@ -39,8 +40,7 @@ router.post("/",
 router.patch("/:id",
   async (req, res) => {
     const {id} = req.params;
-    const data = req.body;
-
+    const data = updateSchema.parse(req.body);
     await PedidoService.patchPedido(id, data);
     return new HttpSuccess({
       message: "Pedido editado com sucesso."

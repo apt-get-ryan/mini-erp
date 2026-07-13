@@ -95,9 +95,13 @@ function Page() {
           },
           {
             accessor: 'valor_total',
-            title: 'Valor total',
+            title: 'Valor do pedido + Frete',
             sortable: true,
-            render: ({valor_total}) => <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2} fixedDecimalScale value={valor_total / 100}/>
+            render: ({valor_total, custo_frete}) => (<>
+              <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2} fixedDecimalScale value={(valor_total + custo_frete) / 100}/>
+              <span> + </span>
+              <NumberFormatter prefix='R$ ' thousandSeparator='.' decimalSeparator=',' decimalScale={2} fixedDecimalScale value={custo_frete / 100}/>
+            </>)
           },
           {
             accessor: 'createdAt', 

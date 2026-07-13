@@ -42,7 +42,7 @@ function PaymentForm({idPedido, data}) {
         decimalScale={2}
         fixedDecimalScale
         min={0}
-        max={(data.valor_total - data.valor_pago) / 100}
+        max={(data.valor_total - data.valor_pago + data.custo_frete) / 100}
         classNames={{ label: "font-bold!"}}
         label="Valor do pagamento"
         {...form.getInputProps("valor")}

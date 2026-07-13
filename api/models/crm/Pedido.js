@@ -16,6 +16,10 @@ const Pedido = db.define(
         key: "id"
       }
     },
+    custo_frete: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    }
   },
   {
     tableName: "pedidos",

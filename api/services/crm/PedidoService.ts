@@ -1,5 +1,5 @@
 import PedidoRepository from "@/repositories/crm/PedidoRepository.ts";
-import { createSchema, updateSchema } from "@/schemas/crm/Pedido.ts";
+import { updateSchema } from "@/schemas/crm/Pedido.ts";
 import z from "zod";
 import type { FindOptions } from "sequelize";
 

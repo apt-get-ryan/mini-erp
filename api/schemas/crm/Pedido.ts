@@ -7,10 +7,12 @@ export const pedidoSchema = z.object({
     .int()
     .positive({ message: "ID do cliente inválido" }),
 
-  valor_pago: z
+  custo_frete: z
     .number()
     .int()
-    .min(0, { message: "O valor pago não pode ser negativo" })
+    .min(0, { message: "O custo de frete não pode ser negativo" })
+    .optional()
+    .default(0)
 },
 {
   error: (issue) => {

@@ -8,6 +8,7 @@ async function getPedidos(options = undefined) {
       attributes: [
         "id",
         "id_cliente",
+        "custo_frete",
         "createdAt",
         "updatedAt",
         [
@@ -52,6 +53,7 @@ async function getPedido(id) {
       attributes: [
         "id",
         "id_cliente",
+        "custo_frete",
         "createdAt",
         "updatedAt",
         [
