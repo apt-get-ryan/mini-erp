@@ -1,11 +1,13 @@
 import express from "express";
 import RolePermissionService from "@/services/rbac/RolePermissionService.js";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
+import {checkPermission} from "@/middleware/permissionMiddleware.js";
 
 const router = express.Router();
 
 router.get(
   "/:id",
+  checkPermission("**role_permission**"),
   async (req, res) => {
     const { id } = req.params;
       const rolePermissions = await RolePermissionService.getRolePermission(id);
@@ -17,6 +19,7 @@ router.get(
 
 router.put(
   "/:id",
+  checkPermission("**role_permission**"),
   async (req, res) => {
     const { id } = req.params;
     const { permissions } = req.body;
@@ -27,14 +30,5 @@ router.put(
   }
 )
 
-// router.post(
-//   "/",
-//   async (req, res) => {
-//     const  {role_id, permission_id} = req.body;
-//     await RolePermissionService.saveRolePermission({role_id, permission_id});
-//     return new HttpSuccess({
-//       message: ""
-//     })
-//   }
-// )
+
 export default router;

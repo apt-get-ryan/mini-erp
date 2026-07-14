@@ -1,11 +1,13 @@
 import express from "express";
 import PermissionService from "@/services/rbac/PermissionService.js";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
+import {checkPermission} from "@/middleware/permissionMiddleware.js";
 
 const router = express.Router();
 
 router.get(
   "/",
+  checkPermission("permissions.read"),
   async (req, res) => {
     const permissions = await PermissionService.getPermissions();
     return new HttpSuccess({
@@ -16,6 +18,7 @@ router.get(
 
 router.patch(
   "/:id",
+  checkPermission("permissions.update"),
   async (req, res) => {
     const data = req.body;
     const { id } = req.params;
@@ -28,6 +31,7 @@ router.patch(
 
 router.post(
   "/",
+  checkPermission("permissions.create"),
   async (req, res) => {;
     const data = req.body;
     await PermissionService.savePermission(data);
@@ -39,6 +43,7 @@ router.post(
 
 router.delete(
   "/:id",
+  checkPermission("permissions.delete"),
   async (req, res) => {
     const { id } = req.params;
     await PermissionService.deletePermission(id);

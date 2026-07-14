@@ -2,10 +2,12 @@ import express from 'express';
 import UserService from '@/services/rbac/UserService.js';
 import bcrypt from 'bcrypt'
 import HttpSuccess from '@/utils/HttpSuccess.ts';
+import { checkPermission } from '@/middleware/permissionMiddleware.js';
 const router =  express.Router();
 
 router.post(
   "/",
+  checkPermission("users.create"),
   async (req, res) => {
     const data = req.body;
     await UserService.saveUser(data);
@@ -17,6 +19,7 @@ router.post(
 
 router.get(
   "/",
+  checkPermission("users.read"),
   async (req, res) => {
     const users = await UserService.getUsers();
     return new HttpSuccess({
@@ -27,6 +30,7 @@ router.get(
 
 router.get(
   "/:id",
+  checkPermission("users.read"),
   async (req, res) => {
     const { id } = req.params;
     const user = await UserService.getUser(id);
@@ -38,6 +42,7 @@ router.get(
 
 router.patch(
   "/:id",
+  checkPermission("users.update"),
   async (req, res) => {
     const { id } = req.params;
     const body = req.body;
@@ -50,6 +55,7 @@ router.patch(
 
 router.delete(
   "/:id",
+  checkPermission("users.delete"),
   async (req, res) => {
     const { id } = req.params;
     await UserService.deleteUser(id);

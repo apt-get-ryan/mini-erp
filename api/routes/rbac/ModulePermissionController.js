@@ -1,9 +1,11 @@
 import express from "express";
 import ModulePermissionService from '@/services/rbac/ModulePermissionService.js';
 import HttpSuccess from "@/utils/HttpSuccess.ts";
+import {checkPermission} from "@/middleware/permissionMiddleware.js";
 const router = express.Router();
 
 router.get("/:id",
+  checkPermission("**module_permission**"),
   async (req, res) => {
     const {id} = req.params;
     const modulePermission =  await ModulePermissionService.getAcessPermissionByModuleId(id);
@@ -17,6 +19,7 @@ router.get("/:id",
 
 router.put(
   "/:id",
+  checkPermission("**module_permission**"),
   async (req, res) => {
     const { id } = req.params;
     const {permission} = req.body;

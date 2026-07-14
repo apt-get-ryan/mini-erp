@@ -9,7 +9,7 @@ const DB_HOST = process.env.DB_HOST;
 
 
 const db = new Sequelize(
-  "cadastro_clientes", DB_USER, DB_PASS, 
+  "mini_erp_db", DB_USER, DB_PASS, 
   {
     host: DB_HOST,
     port: DB_PORT,

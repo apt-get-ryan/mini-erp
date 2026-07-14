@@ -2,9 +2,11 @@ import express from "express";
 import CategoriaService from "@/services/crm/CategoriaService.js";
 import { HttpError } from "@/utils/HttpError.ts";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
+import {checkPermission} from "@/middleware/permissionMiddleware.js";
 
 const router = express.Router();
 router.get("/",
+  checkPermission("**categorias**"),
   async (req, res) => {
     const categorias = await CategoriaService.getCategorias();
     return new HttpSuccess({
@@ -14,6 +16,7 @@ router.get("/",
 );
 
 router.post("/",
+  checkPermission("**categorias**"),
   async (req, res) => {
     const data = req.body;
     await CategoriaService.createCategoria(data);
@@ -24,6 +27,7 @@ router.post("/",
 );
 
 router.patch("/:id",
+  checkPermission("**categorias**"),
   async (req, res) => {
     const {id} = req.params;
     const data = req.body;
@@ -35,6 +39,7 @@ router.patch("/:id",
 )
 
 router.delete("/:id",
+  checkPermission("**categorias**"),
   async (req, res) => {
     const {id} = req.params;
     await CategoriaService.deleteCategoria(id);

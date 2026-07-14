@@ -6,9 +6,11 @@ import { z } from "zod";
 import PedidoItensController from "./PedidoItensController.js";
 import PagamentoController from "./PagamentoController.js";
 import { updateSchema } from "@/schemas/crm/Pedido.ts";
+import { checkPermission } from "@/middleware/permissionMiddleware.ts";
 
 const router = express.Router();
 router.get("/",
+  checkPermission("**pedidos**"),
   async (req, res) => {
     const pedidos = await PedidoService.getPedidos();
     return new HttpSuccess({
@@ -18,6 +20,7 @@ router.get("/",
 );
 
 router.get("/:id",
+  checkPermission("**pedidos**"),
   async (req, res) => {
     const id = z.coerce.number().int().nonnegative().parse(req.params.id);
     const pedido = await PedidoService.getPedido(id);
@@ -28,6 +31,7 @@ router.get("/:id",
 )
 
 router.post("/",
+  checkPermission("**pedidos**"),
   async (req, res) => {
     const idPedido = await PedidoService.createPedido();
     return new HttpSuccess({
@@ -38,6 +42,7 @@ router.post("/",
 );
 
 router.patch("/:id",
+  checkPermission("**pedidos**"),
   async (req, res) => {
     const {id} = req.params;
     const data = updateSchema.parse(req.body);
@@ -49,6 +54,7 @@ router.patch("/:id",
 )
 
 router.delete("/:id",
+  checkPermission("**pedidos**"),
   async (req, res) => {
     const {id} = req.params;
     await PedidoService.deletePedido(id);
@@ -59,6 +65,7 @@ router.delete("/:id",
 );
 
 router.post("/:idPedido/cliente",
+  checkPermission("**pedidos**"),
   async (req, res) => {
     const idPedido = z.coerce.number().int().positive().parse(req.params.idPedido)
     const idCliente = z.coerce.number().int().positive().parse(req.body.id_cliente);
@@ -70,8 +77,8 @@ router.post("/:idPedido/cliente",
   }
 );
 
-router.use(PedidoItensController);
-router.use(PagamentoController);
+router.use(checkPermission("**pedidos**"), PedidoItensController);
+router.use(checkPermission("**pedidos**"), PagamentoController);
 
 const PedidoController = router;
 

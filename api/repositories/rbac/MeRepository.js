@@ -100,7 +100,7 @@ const checkIfUserHasPermission = async (userId, resource, action) => {
           required: true
         }]
       }]
-    })
+    });
     return Boolean(hasPermission);
   } catch (error) {
     throw HttpError.from(error);

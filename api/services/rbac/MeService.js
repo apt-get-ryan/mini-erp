@@ -14,8 +14,8 @@ const checkIfUserHasPermission = async (id, permission) => {
     const resource = permission.slice(2, -2);
     return await MeRepository.checkIfUserHasPermission(id, resource, undefined);
   }
-  const [resource, action] = permission.split(":");
-  return await MeRepository.checkIfUserHasPermission(id, permission)
+  const [resource, action] = permission.split(".");
+  return await MeRepository.checkIfUserHasPermission(id, resource, action);
 }
 
 export default {

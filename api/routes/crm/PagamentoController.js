@@ -3,6 +3,7 @@ import PagamentoService from "@/services/crm/PagamentoService.js";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
 import { createSchema } from "@/schemas/crm/Pagamento.ts";
 import z from "zod";
+import {checkPermission} from "@/middleware/permissionMiddleware.js";
 
 const router = express.Router();
 

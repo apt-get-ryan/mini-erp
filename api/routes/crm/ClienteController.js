@@ -2,9 +2,11 @@ import express from "express";
 import ClienteService from "@/services/crm/ClienteService.js";
 import { HttpError } from "@/utils/HttpError.ts";
 import HttpSuccess from "@/utils/HttpSuccess.ts";
+import {checkPermission} from "@/middleware/permissionMiddleware.js";
 
 const router = express.Router();
 router.get("/",
+  checkPermission("**clientes**"),
   async (req, res) => {
     const simplified = req.query.simplified === "true";
     let clientes = [];
@@ -22,6 +24,7 @@ router.get("/",
 );
 
 router.post("/",
+  checkPermission("**clientes**"),
   async (req, res) => {
     const data = req.body;
     await ClienteService.createCliente(data);
@@ -32,6 +35,7 @@ router.post("/",
 );
 
 router.patch("/:id",
+  checkPermission("**clientes**"),
   async (req, res) => {
     const {id} = req.params;
     const data = req.body;
@@ -43,6 +47,7 @@ router.patch("/:id",
 )
 
 router.delete("/:id",
+  checkPermission("**clientes**"),
   async (req, res) => {
     const {id} = req.params;
     await ClienteService.deleteCliente(id);
