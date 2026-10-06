@@ -6,6 +6,8 @@
 pnpm install
 ```
 
+**Importe o dump do banco de dados no seu MySQL**
+
 **E em seguida para então rodar o projeto:**
 
 ```bash
